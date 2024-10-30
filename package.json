@@ -9,6 +9,12 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@emotion/cache": "^11.13.1",
+    "@emotion/react": "^11.13.3",
+    "@emotion/styled": "^11.13.0",
+    "@mui/icons-material": "^6.1.5",
+    "@mui/material": "^6.1.4",
+    "@mui/material-nextjs": "^6.1.4",
     "react": "19.0.0-rc-02c0e824-20241028",
     "react-dom": "19.0.0-rc-02c0e824-20241028",
     "next": "15.0.2"
@@ -20,5 +26,15 @@
     "@types/react-dom": "^18",
     "eslint": "^8",
     "eslint-config-next": "15.0.2"
+  },
+  "overrides": {
+    "react": "19.0.0-rc-02c0e824-20241028",
+    "react-dom": "19.0.0-rc-02c0e824-20241028",
+    "@emotion/react": {
+      "react": "19.0.0-rc-02c0e824-20241028"
+    },
+    "@mui/material-nextjs": {
+      "next": "^15.0.2"
+    }
   }
 }
