@@ -4,6 +4,7 @@ import { ThemeProvider } from "@mui/material/styles";
 import theme from "@/theme";
 import { Container, CssBaseline } from "@mui/material";
 import { Metadata } from "next";
+import siteConfig from "../../config/siteConfig";
 
 const roboto = Roboto({
   weight: ["300", "400", "500", "700"],
@@ -12,8 +13,13 @@ const roboto = Roboto({
   variable: "--font-roboto",
 });
 export const metadata: Metadata = {
-  title: "ACCA",
-  description: "ACCA",
+  title: siteConfig.siteName,
+  description: siteConfig.description,
+  authors: {
+    name: siteConfig.author,
+    url: siteConfig.baseUrl,
+  },
+  keywords: siteConfig.keywords,
 };
 
 export default function RootLayout(props: { children: React.ReactNode }) {

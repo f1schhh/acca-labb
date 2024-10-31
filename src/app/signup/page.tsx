@@ -2,6 +2,7 @@
 import { Alert, Container, Link, Paper, Typography } from "@mui/material";
 import SignUpForm from "../../../components/forms/SignUpForm";
 import { useState } from "react";
+import siteConfig from "../../../config/siteConfig";
 
 export default function SignUp() {
   const [responseMsg, setResponseMsg] = useState<string>("");
@@ -22,7 +23,7 @@ export default function SignUp() {
         height: "100vh",
       }}
     >
-      <Typography variant="h3">Sign up at ACCA</Typography>
+      <Typography variant="h3">Sign up at {siteConfig.siteName}</Typography>
       {error && (
         <Alert
           variant="filled"

@@ -10,7 +10,3 @@ export interface UserTypes {
   country?: string;
   city?: string;
 }
-
-export interface formProps {
-  onAction: (message?: string, error?: boolean) => void;
-}

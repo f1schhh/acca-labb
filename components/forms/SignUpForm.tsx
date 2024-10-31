@@ -8,7 +8,7 @@ import {
   TextField,
 } from "@mui/material";
 import { useState } from "react";
-import { formProps, UserTypes } from "../../lib/datatypes";
+import { formProps, UserTypes } from "../../types";
 
 export default function SignUpForm({ onAction }: formProps) {
   const [currentpassword, setCurrentPassword] = useState<string | null>(null);

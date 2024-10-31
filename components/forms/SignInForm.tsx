@@ -1,6 +1,6 @@
 "use client";
 import { Box, Button, TextField } from "@mui/material";
-import { UserTypes } from "../../lib/datatypes";
+import { UserTypes } from "../../types";
 
 export default function SignInForm() {
   const handleOnSubmit = (event: React.FormEvent<HTMLFormElement>) => {
