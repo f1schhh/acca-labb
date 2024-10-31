@@ -24,7 +24,12 @@ export default function RootLayout(props: { children: React.ReactNode }) {
         <AppRouterCacheProvider>
           <ThemeProvider theme={theme}>
             <CssBaseline />
-            <Container maxWidth="lg">{children}</Container>
+            <Container
+              maxWidth="xl"
+              disableGutters
+            >
+              {children}
+            </Container>
           </ThemeProvider>
         </AppRouterCacheProvider>
       </body>
