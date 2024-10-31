@@ -1,12 +1,5 @@
 "use client";
-import {
-  Box,
-  FormControl,
-  InputLabel,
-  OutlinedInput,
-  Button,
-  TextField,
-} from "@mui/material";
+import { Box, Button, TextField } from "@mui/material";
 import { UserTypes } from "../../lib/datatypes";
 
 export default function SignInForm() {
