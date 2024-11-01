@@ -10,19 +10,44 @@ user_id(ska vara kopplat till en tabell som heter users)
 - jobStatus - id, jobStatus
 
 -- Table: users
-CREATE TABLE users (
-    id SERIAL PRIMARY KEY,
-    first_name VARCHAR(100) NOT NULL,
-    last_name VARCHAR(100) NOT NULL,
-    email VARCHAR(150) UNIQUE NOT NULL,
-    password VARCHAR(255) NOT NULL,
-    address VARCHAR(255),
-    phone VARCHAR(15),
-    zipcode VARCHAR(10),
-    city VARCHAR(100),
-    country VARCHAR(100),
-    signup_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    last_login_date TIMESTAMP
+-- CREATE TABLE users (
+--     id SERIAL PRIMARY KEY,
+--     first_name VARCHAR(100) NOT NULL,
+--     last_name VARCHAR(100) NOT NULL,
+--     email VARCHAR(150) UNIQUE NOT NULL,
+--     password VARCHAR(255) NOT NULL,
+--     address VARCHAR(255),
+--     phone VARCHAR(15),
+--     zipcode VARCHAR(10),
+--     city VARCHAR(100),
+--     country VARCHAR(100),
+--     signup_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+--     last_login_date TIMESTAMP
+-- );
+
+CREATE SCHEMA IF NOT EXISTS auth;
+
+CREATE TABLE IF NOT EXISTS auth.users (
+  id SERIAL PRIMARY KEY,
+  first_name VARCHAR(100) NOT NULL,
+  last_name VARCHAR(100) NOT NULL,
+  email VARCHAR(255) UNIQUE NOT NULL,
+  password VARCHAR(255),
+  address VARCHAR(255),
+  phone VARCHAR(15),
+  zipcode VARCHAR(10),
+  city VARCHAR(100),
+  country VARCHAR(100),
+  email_verified TIMESTAMP WITH TIME ZONE,
+  signup_date TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
+  last_login_date TIMESTAMP WITH TIME ZONE
+);
+
+CREATE TABLE IF NOT EXISTS auth.sessions (
+  id SERIAL PRIMARY KEY,
+  user_id INTEGER NOT NULL REFERENCES auth.users(id),
+  expires TIMESTAMP WITH TIME ZONE NOT NULL,
+  session_token VARCHAR(255) NOT NULL UNIQUE
 );
 
 -- Table: jobTypes

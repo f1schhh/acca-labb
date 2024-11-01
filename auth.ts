@@ -3,18 +3,10 @@ import Credentials from "next-auth/providers/credentials";
 import { pool } from "./lib/db";
 import bcrypt from "bcrypt";
 
-// interface CustomCredentials {
-//   email: string;
-//   password: string;
-//   name?: string;
-//   phone?: string;
-//   address?: string;
-// }
-
 export const authConfig: NextAuthConfig = {
   pages: {
-    signIn: "/auth/signin",
-    newUser: "/auth/signup",
+    signIn: "/",
+    newUser: "/signup",
   },
   providers: [
     Credentials({
@@ -31,22 +23,49 @@ export const authConfig: NextAuthConfig = {
 
         // Check if this is a signup request
         if (req.body?.mode === "signup") {
-          if (!credentials.name || !credentials.phone || !credentials.address) {
+          if (
+            !credentials.first_name ||
+            !credentials.last_name ||
+            !credentials.email ||
+            !credentials.password ||
+            !credentials.address ||
+            !credentials.phone ||
+            !credentials.zipcode ||
+            !credentials.city ||
+            !credentials.country
+          ) {
             throw new Error("Missing required fields for signup");
           }
 
           const hashedPassword = await bcrypt.hash(credentials.password, 10);
 
           const result = await pool.query(
-            `INSERT INTO auth.users (email, password, name, phone, address)
-             VALUES ($1, $2, $3, $4, $5)
-             RETURNING *`,
+            `INSERT INTO auth.users (
+              first_name,
+              last_name,
+              email,
+              password,
+              address,
+              phone,
+              zipcode,
+              city,
+              country,
+              signup_date,
+              last_login_date
+            )
+            VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP)
+            RETURNING *`,
             [
+              credentials.first_name,
+              credentials.last_name,
               credentials.email,
               hashedPassword,
               credentials.name,
               credentials.phone,
               credentials.address,
+              credentials.zipcode,
+              credentials.city,
+              credentials.country,
             ]
           );
 
@@ -54,7 +73,8 @@ export const authConfig: NextAuthConfig = {
           return {
             id: newUser.id,
             email: newUser.email,
-            name: newUser.name,
+            first_name: newUser.first_name,
+            last_name: newUser.last_name,
           };
         }
 
