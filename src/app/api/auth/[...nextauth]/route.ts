@@ -1,7 +1,7 @@
 import NextAuth from "next-auth";
-import { authConfig } from "../../../../lib/auth/auth-config";
+import { authConfig } from "../../../../../auth";
 import PostgresAdapter from "@auth/pg-adapter";
-import { pool } from "../../../../lib/auth/db";
+import { pool } from "../../../../../lib/db";
 
 export const {
   handlers: { GET, POST },

@@ -1,12 +1,20 @@
-import type { NextAuthConfig } from "next-auth";
+import type { NextAuthConfig, User } from "next-auth";
 import Credentials from "next-auth/providers/credentials";
-import { pool } from "./db";
+import { pool } from "./lib/db";
 import bcrypt from "bcrypt";
+
+// interface CustomCredentials {
+//   email: string;
+//   password: string;
+//   name?: string;
+//   phone?: string;
+//   address?: string;
+// }
 
 export const authConfig: NextAuthConfig = {
   pages: {
     signIn: "/auth/signin",
-    newUser: "/auth/signup", // Add this line
+    newUser: "/auth/signup",
   },
   providers: [
     Credentials({
@@ -18,7 +26,7 @@ export const authConfig: NextAuthConfig = {
         phone: { label: "Phone", type: "text" },
         address: { label: "Address", type: "text" },
       },
-      async authorize(credentials, req) {
+      async authorize(credentials, req): Promise<User | null> {
         if (!credentials?.email || !credentials?.password) return null;
 
         // Check if this is a signup request
