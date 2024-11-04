@@ -114,7 +114,7 @@ export default function ApplicationTable() {
           {rows.map((row) => (
             <TableRow
               key={row.job_title}
-              sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
+              sx={{ "&:last-child td, &:last-child th": { border: 1 } }}
             >
               <TableCell
                 component="th"
