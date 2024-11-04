@@ -1,4 +1,3 @@
-"use client";
 import { Box, Button, TextField } from "@mui/material";
 
 export default function SettingsForm() {
