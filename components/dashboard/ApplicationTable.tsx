@@ -1,4 +1,4 @@
-import * as React from "react";
+"use client";
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
 import TableCell from "@mui/material/TableCell";
@@ -6,144 +6,162 @@ import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import Paper from "@mui/material/Paper";
-import { IconButton } from "@mui/material";
+import { IconButton, Skeleton } from "@mui/material";
+import ArchiveIcon from "@mui/icons-material/Archive";
 import EditIcon from "@mui/icons-material/Edit";
 import Link from "next/link";
+import { JobApplicationTypes } from "../../types";
+import { useState } from "react";
+import ApplicationDialog from "./ApplicationDialog";
 
-// Define the structure for a job application row
-interface JobApplication {
-  job_title: string;
-  job_location: string;
-  company_name: string;
-  contact_person: string;
-  application_url: string;
-  job_type_id: number;
-  job_status_id: number;
+interface ApplicationTableProps {
+  applications: JobApplicationTypes[];
+  loading?: boolean;
 }
 
-// Create data function with typed parameters
-function createData(
-  job_title: string,
-  job_location: string,
-  company_name: string,
-  contact_person: string,
-  application_url: string,
-  job_type_id: number,
-  job_status_id: number
-): JobApplication {
-  return {
-    job_title,
-    job_location,
-    company_name,
-    contact_person,
-    application_url,
-    job_type_id,
-    job_status_id,
+const ApplicationTable: React.FC<ApplicationTableProps> = ({
+  applications,
+  loading,
+}) => {
+  const [openDialog, setOpenDialog] = useState(false);
+  const [selectedApplication, setSelectedApplication] =
+    useState<JobApplicationTypes | null>(null);
+  const [title, setTitle] = useState<string>("");
+  const [archive, setArchive] = useState<boolean>(false);
+
+  const handleOpenDialog = (
+    application: JobApplicationTypes,
+    title: string
+  ) => {
+    setSelectedApplication(application);
+    setOpenDialog(true);
+    setTitle(title);
   };
-}
 
-// Sample data with JobApplication type
-const rows: JobApplication[] = [
-  createData(
-    "Software Engineer",
-    "San Francisco, CA",
-    "TechCorp",
-    "Alice Johnson",
-    "https://techcorp.com/jobs/1",
-    1,
-    2
-  ),
-  createData(
-    "Data Analyst",
-    "New York, NY",
-    "DataWorks",
-    "Bob Smith",
-    "https://dataworks.com/jobs/23",
-    2,
-    3
-  ),
-  createData(
-    "Product Manager",
-    "Remote",
-    "InnovatePlus",
-    "Carol White",
-    "https://innovateplus.com/jobs/45",
-    1,
-    1
-  ),
-  createData(
-    "UX Designer",
-    "Los Angeles, CA",
-    "DesignHub",
-    "David Lee",
-    "https://designhub.com/jobs/67",
-    3,
-    2
-  ),
-  createData(
-    "Frontend Developer",
-    "Austin, TX",
-    "Webify",
-    "Emma Brown",
-    "https://webify.com/jobs/89",
-    1,
-    4
-  ),
-];
+  const handleCloseDialog = () => {
+    setOpenDialog(false);
+    setSelectedApplication(null);
+  };
 
-export default function ApplicationTable() {
+  const skeletonRows = Array.from({ length: 5 });
   return (
-    <TableContainer component={Paper}>
-      <Table
-        sx={{ minWidth: 650 }}
-        aria-label="job applications table"
-      >
-        <TableHead>
-          <TableRow>
-            <TableCell>Job Title</TableCell>
-            <TableCell>Location</TableCell>
-            <TableCell>Company</TableCell>
-            <TableCell>Contact</TableCell>
-            <TableCell>Application URL</TableCell>
-            <TableCell>Job Type ID</TableCell>
-            <TableCell>Job Status ID</TableCell>
-            <TableCell align="right">Edit</TableCell>
-          </TableRow>
-        </TableHead>
-        <TableBody>
-          {rows.map((row) => (
-            <TableRow
-              key={row.job_title}
-              sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
-            >
-              <TableCell
-                component="th"
-                scope="row"
-              >
-                {row.job_title}
-              </TableCell>
-              <TableCell>{row.job_location}</TableCell>
-              <TableCell>{row.company_name}</TableCell>
-              <TableCell>{row.contact_person}</TableCell>
-              <TableCell>
-                <Link
-                  href={row.application_url}
-                  color="inherit"
-                >
-                  {row.application_url}
-                </Link>
-              </TableCell>
-              <TableCell>{row.job_type_id}</TableCell>
-              <TableCell>{row.job_status_id}</TableCell>
-              <TableCell align="right">
-                <IconButton>
-                  <EditIcon />
-                </IconButton>
-              </TableCell>
+    <>
+      <TableContainer component={Paper}>
+        <Table
+          sx={{ minWidth: 650 }}
+          aria-label="job applications table"
+        >
+          <TableHead>
+            <TableRow>
+              <TableCell>Job Title</TableCell>
+              <TableCell>Location</TableCell>
+              <TableCell>Company</TableCell>
+              <TableCell>Contact</TableCell>
+              <TableCell>Application URL</TableCell>
+              <TableCell>Type</TableCell>
+              <TableCell>Status</TableCell>
+              <TableCell align="right">Edit</TableCell>
+              <TableCell align="right">Archive</TableCell>
             </TableRow>
-          ))}
-        </TableBody>
-      </Table>
-    </TableContainer>
+          </TableHead>
+          <TableBody>
+            {loading
+              ? skeletonRows.map((_, index) => (
+                  <TableRow key={index}>
+                    <TableCell>
+                      <Skeleton variant="text" />
+                    </TableCell>
+                    <TableCell>
+                      <Skeleton variant="text" />
+                    </TableCell>
+                    <TableCell>
+                      <Skeleton variant="text" />
+                    </TableCell>
+                    <TableCell>
+                      <Skeleton variant="text" />
+                    </TableCell>
+                    <TableCell>
+                      <Skeleton variant="text" />
+                    </TableCell>
+                    <TableCell>
+                      <Skeleton variant="text" />
+                    </TableCell>
+                    <TableCell>
+                      <Skeleton variant="text" />
+                    </TableCell>
+                    <TableCell align="right">
+                      <Skeleton
+                        variant="circular"
+                        width={24}
+                        height={24}
+                      />
+                    </TableCell>
+                    <TableCell align="right">
+                      <Skeleton
+                        variant="circular"
+                        width={24}
+                        height={24}
+                      />
+                    </TableCell>
+                  </TableRow>
+                ))
+              : applications.map((row) => (
+                  <TableRow
+                    key={row.job_title}
+                    sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
+                  >
+                    <TableCell
+                      component="th"
+                      scope="row"
+                    >
+                      {row.job_title}
+                    </TableCell>
+                    <TableCell>{row.job_location}</TableCell>
+                    <TableCell>{row.company_name}</TableCell>
+                    <TableCell>{row.contact_person}</TableCell>
+                    <TableCell>
+                      <Link
+                        href={row.application_url}
+                        color="inherit"
+                      >
+                        {row.application_url}
+                      </Link>
+                    </TableCell>
+                    <TableCell>{row.job_type}</TableCell>
+                    <TableCell>{row.job_status}</TableCell>
+                    <TableCell align="right">
+                      <IconButton
+                        onClick={() => {
+                          handleOpenDialog(row, "Edit Application");
+                          setArchive(false);
+                        }}
+                      >
+                        <EditIcon />
+                      </IconButton>
+                    </TableCell>
+                    <TableCell align="right">
+                      <IconButton
+                        onClick={() => {
+                          handleOpenDialog(row, "Archive Application");
+                          setArchive(true);
+                        }}
+                      >
+                        <ArchiveIcon />
+                      </IconButton>
+                    </TableCell>
+                  </TableRow>
+                ))}
+          </TableBody>
+        </Table>
+      </TableContainer>
+      <ApplicationDialog
+        archive={archive ? true : false}
+        open={openDialog}
+        onClose={handleCloseDialog}
+        title={title}
+        application={selectedApplication}
+      />
+    </>
   );
-}
+};
+export default ApplicationTable;
