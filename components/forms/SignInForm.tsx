@@ -2,9 +2,9 @@
 import { Box, Button, TextField } from "@mui/material";
 // import { UserTypes } from "../../types";
 import { useState } from "react";
-import { signIn } from "next-auth/react";
+import { loginWithCredentials } from "@/app/lib/actions";
+import { signInSchema } from "@/app/lib/zod";
 import { useRouter } from "next/navigation";
-
 export default function SignInForm() {
   const router = useRouter();
   const [error, setError] = useState<string>("");
@@ -15,34 +15,34 @@ export default function SignInForm() {
     setIsLoading(true);
     setError("");
 
-    // const formJson = Object.fromEntries(formData.entries());
-    //   const typedFormData: UserTypes = {
-    //     email: formJson.email as string,
-    //     password: formJson.password as string,
-    // };
-    // console.log(typedFormData);
-    // event.currentTarget.reset();
-
     try {
       const formData = new FormData(event.currentTarget);
 
-      const signInResult = await signIn("credentials", {
+      const validatedFields = signInSchema.safeParse({
         email: formData.get("email"),
         password: formData.get("password"),
-        redirect: false,
       });
 
-      if (signInResult?.error) {
-        setError(signInResult.error);
+      console.log("2. Validation result:", validatedFields);
+
+      if (!validatedFields.success) {
+        setError(validatedFields.error.errors[0].message);
         return;
       }
 
-      if (signInResult?.ok) {
+      console.log("2. About to call loginWithCredentials");
+
+      const response = await loginWithCredentials(formData);
+
+      if (response?.error) {
+        setError(response.message);
+      } else {
+        console.log("Login successful");
         router.push("/dashboard");
-        router.refresh();
       }
     } catch (error) {
-      setError(`Something went wrong: ${error}`);
+      console.log("Error:", error);
+      setError("Failed to login");
     } finally {
       setIsLoading(false);
     }

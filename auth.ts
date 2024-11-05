@@ -1,104 +1,62 @@
-import type { NextAuthConfig, User } from "next-auth";
+// import type { NextAuthConfig } from "next-auth";
+import NextAuth from "next-auth";
 import Credentials from "next-auth/providers/credentials";
-import { pool } from "./lib/db";
-import bcrypt from "bcrypt";
+// import bcrypt from "bcrypt";
+import { getUserByEmail } from "@/app/api/users/route";
 
-export const authConfig: NextAuthConfig = {
-  pages: {
-    signIn: "/",
-    newUser: "/signup",
-  },
+export const { handlers, signIn, signOut, auth } = NextAuth({
+  debug: true,
+  session: { strategy: "jwt" },
+  secret: process.env.NEXTAUTH_SECRET,
   providers: [
     Credentials({
-      name: "Credentials",
       credentials: {
-        email: { label: "Email", type: "text" },
-        password: { label: "Password", type: "password" },
-        name: { label: "Name", type: "text" },
-        phone: { label: "Phone", type: "text" },
-        address: { label: "Address", type: "text" },
+        email: {},
+        password: {},
       },
-      async authorize(credentials, req): Promise<User | null> {
-        if (!credentials?.email || !credentials?.password) return null;
+      async authorize(credentials) {
+        const user = await getUserByEmail(credentials.email as string);
+        console.log("Found user:", !!user);
+        console.log("User:", user);
 
-        // Check if this is a signup request
-        if (req.body?.mode === "signup") {
-          if (
-            !credentials.first_name ||
-            !credentials.last_name ||
-            !credentials.email ||
-            !credentials.password ||
-            !credentials.address ||
-            !credentials.phone ||
-            !credentials.zipcode ||
-            !credentials.city ||
-            !credentials.country
-          ) {
-            throw new Error("Missing required fields for signup");
-          }
-
-          const hashedPassword = await bcrypt.hash(credentials.password, 10);
-
-          const result = await pool.query(
-            `INSERT INTO auth.users (
-              first_name,
-              last_name,
-              email,
-              password,
-              address,
-              phone,
-              zipcode,
-              city,
-              country,
-              signup_date,
-              last_login_date
-            )
-            VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP)
-            RETURNING *`,
-            [
-              credentials.first_name,
-              credentials.last_name,
-              credentials.email,
-              hashedPassword,
-              credentials.name,
-              credentials.phone,
-              credentials.address,
-              credentials.zipcode,
-              credentials.city,
-              credentials.country,
-            ]
-          );
-
-          const newUser = result.rows[0];
-          return {
-            id: newUser.id,
-            email: newUser.email,
-            first_name: newUser.first_name,
-            last_name: newUser.last_name,
-          };
+        if (!user) {
+          console.log("No user found with email:", credentials.email);
+          throw new Error("No user found with email");
         }
 
-        // Login flow
-        const result = await pool.query(
-          "SELECT * FROM auth.users WHERE email = $1",
-          [credentials.email]
-        );
+        // else {
+        //   const passwordMatch = await bcrypt.compare(
+        //     credentials.password as string,
+        //     user.password as string
+        //   );
+        //   if (!passwordMatch) {
+        //     console.log("Password doesn't match");
+        //     throw new Error("Password doesn't match");
+        //   }
+        // }
 
-        const user = result.rows[0];
-        if (!user) return null;
-
-        const isValid = await bcrypt.compare(
-          credentials.password,
-          user.password
-        );
-        if (!isValid) return null;
-
+        console.log("Auth successful, returning user");
         return {
-          id: user.id,
-          email: user.email,
-          name: user.name,
+          id: user.id.toString(),
+          email: user.email as string,
+          name: `${user.first_name} ${user.last_name}` as string,
         };
       },
     }),
   ],
-};
+  callbacks: {
+    jwt({ token, user }) {
+      if (user) {
+        token.id = user.id;
+      }
+      return token;
+    },
+    session({ session, token }) {
+      session.user.id = token.id as string;
+      return session;
+    },
+  },
+  pages: {
+    signIn: "/",
+  },
+});

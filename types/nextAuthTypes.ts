@@ -1,10 +1,11 @@
 import NextAuth from "next-auth";
 
-declare module "next-auth" {
-  interface User {
+export declare module "next-auth" {
+  export interface User {
     id?: string;
     first_name?: string;
     last_name?: string;
+    password: string;
     email?: string;
     address?: string;
     phone?: string;
@@ -14,6 +15,7 @@ declare module "next-auth" {
     email_verified?: Date;
     signup_date: Date;
     last_login_date?: Date;
+    mode?: string;
   }
 
   export interface Session {

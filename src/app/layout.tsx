@@ -1,7 +1,6 @@
 import { AppRouterCacheProvider } from "@mui/material-nextjs/v14-appRouter";
 import { Roboto } from "next/font/google";
 import { ThemeProvider } from "@mui/material/styles";
-import { SessionProvider } from "next-auth/react";
 import theme from "@/theme";
 import { Container, CssBaseline } from "@mui/material";
 import { Metadata } from "next";
@@ -23,21 +22,19 @@ export const metadata: Metadata = {
   keywords: siteConfig.keywords,
 };
 
-export default function RootLayout(props: { children: React.ReactNode }) {
+export default async function RootLayout(props: { children: React.ReactNode }) {
   const { children } = props;
   return (
     <html lang="en">
       <body className={roboto.variable}>
-        <SessionProvider>
-          <AppRouterCacheProvider>
-            <ThemeProvider theme={theme}>
-              <CssBaseline />
-              <Container maxWidth="xl" disableGutters>
-                {children}
-              </Container>
-            </ThemeProvider>
-          </AppRouterCacheProvider>
-        </SessionProvider>
+        <AppRouterCacheProvider>
+          <ThemeProvider theme={theme}>
+            <CssBaseline />
+            <Container maxWidth="xl" disableGutters>
+              {children}
+            </Container>
+          </ThemeProvider>
+        </AppRouterCacheProvider>
       </body>
     </html>
   );
