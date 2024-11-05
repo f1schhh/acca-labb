@@ -9,82 +9,25 @@ import {
 } from "@mui/material";
 import { useState } from "react";
 // import { formProps, UserTypes } from "../../types";
-import { signIn } from "next-auth/react";
-import { useRouter } from "next/navigation";
+
+// import { signUpAction } from "@/app/lib/actions";
 
 export default function SignUpForm() {
-  const router = useRouter();
   const [error, setError] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState<boolean>(false);
-  // const [currentpassword, setCurrentPassword] = useState<string | null>(null);
-  // const [currentconfirmPassword, setCurrentConfirmPassword] = useState<
-  //   string | null
-  // >(null);
-  // const handlePasswordError = () => {
-  //   if (currentpassword === null || currentconfirmPassword === null) {
-  //     return false;
-  //   }
-  //   if (
-  //     currentpassword !== currentconfirmPassword &&
-  //     currentpassword.length >= 12
-  //   ) {
-  //     return true;
-  //   }
-  // };
+
   const handleOnSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
 
     try {
       const formData = new FormData(event.currentTarget);
-      setIsLoading(true);
-      setError("");
-
-      const signUpResult = await signIn("credentials", {
-        email: formData.get("email"),
-        password: formData.get("password"),
-        first_name: formData.get("firstName"),
-        last_name: formData.get("lastName"),
-        address: formData.get("address"),
-        phone: formData.get("phoneNumber"),
-        zipcode: formData.get("zipcode"),
-        city: formData.get("city"),
-        country: formData.get("country"),
-        redirect: false,
-        mode: "signup",
-      });
-
-      if (signUpResult?.error) {
-        setError(signUpResult.error);
-        return;
-      }
-
-      if (signUpResult?.ok) {
-        router.push("/dashboard");
-        router.refresh();
-      }
+      console.log(formData);
     } catch (error) {
       setError(`Something went wrong: ${error}`);
     } finally {
       setIsLoading(false);
     }
   };
-  // const formJson = Object.fromEntries(formData.entries());
-  // const typedFormData: UserTypes = {
-  //   firstName: formJson.firstName as string,
-  //   lastName: formJson.lastName as string,
-  //   email: formJson.email as string,
-  //   password: formJson.password as string,
-  //   confirmPassword: formJson.confirmPassword as string,
-  //   address: formJson.address as string,
-  //   zipcode: formJson.zipcode as string,
-  //   phoneNumber: formJson.phoneNumber as string,
-  //   country: formJson.country as string,
-  //   city: formJson.city as string,
-  // };
-  // console.log(typedFormData);
-  // // En action för att skicka till sign up sidan till exempel skicka error till den sidan ifall en användare redan finns tex
-  // onAction("This user already exists", true);
-  // event.currentTarget.reset();
 
   return (
     <form onSubmit={handleOnSubmit}>
