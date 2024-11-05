@@ -19,8 +19,12 @@ export const pool = new Pool({
   connectionTimeoutMillis: 2000,
 });
 
-export const query = async (text: string, params?: []) => {
+export const query = async (
+  text: string,
+  params?: (string | number | boolean)[]
+) => {
   const client = await pool.connect();
+  console.log(client);
   try {
     const res = await client.query(text, params);
     return res;
