@@ -1,6 +1,32 @@
+"use client";
 import { Box, Button, TextField } from "@mui/material";
 
+interface UserData {
+  firstName: string;
+  lastName: string;
+  email: string;
+  address: string;
+  zipcode: string;
+  phoneNumber: string;
+  country: string;
+  city: string;
+  password: string;
+  confirmPassword: string;
+}
+
 export default function SettingsForm() {
+  const data: UserData = {
+    firstName: "John",
+    lastName: "Doe",
+    email: "jdoe@me.com",
+    address: "123 Main St",
+    zipcode: "12345",
+    phoneNumber: "1234567890",
+    country: "USA",
+    city: "New York",
+    password: "password",
+    confirmPassword: "password",
+  };
   return (
     <form>
       <Box sx={{ display: "flex", flexDirection: "column", gap: 2 }}>
@@ -10,6 +36,7 @@ export default function SettingsForm() {
           type="text"
           name="firstName"
           required
+          defaultValue={data.firstName}
         />
         <TextField
           id="lastName-input"
@@ -17,6 +44,7 @@ export default function SettingsForm() {
           type="text"
           name="lastName"
           required
+          defaultValue={data.lastName}
         />
         <TextField
           id="email-input"

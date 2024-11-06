@@ -50,13 +50,13 @@ CREATE TABLE IF NOT EXISTS auth.sessions (
   session_token VARCHAR(255) NOT NULL UNIQUE
 );
 
--- Table: jobTypes
+
 CREATE TABLE jobTypes (
     id SERIAL PRIMARY KEY,
     job_type VARCHAR(50) UNIQUE NOT NULL
 );
 
--- Table: jobStatus
+
 CREATE TABLE jobStatus (
     id SERIAL PRIMARY KEY,
     job_status VARCHAR(50) UNIQUE NOT NULL
@@ -68,7 +68,7 @@ CREATE TABLE savedJobs (
     user_id INT REFERENCES users(id) ON DELETE CASCADE
 );
 
--- Table: jobApplications
+
 CREATE TABLE jobApplications (
     id SERIAL PRIMARY KEY,
     job_title INT REFERENCES savedJobs(id) ON DELETE CASCADE,
