@@ -10,7 +10,6 @@ export default function Dashboard() {
   const [loading, setLoading] = useState<boolean>(true);
 
   const getUserApplications = async () => {
-    setLoading(true);
     try {
       const response = await fetch("/api/latestapplications/1");
       if (!response.ok) {
@@ -62,6 +61,7 @@ export default function Dashboard() {
           <ApplicationTable
             applications={applications || []}
             loading={loading}
+            onAction={() => getUserApplications()}
           />
         )}
       </Box>

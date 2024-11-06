@@ -4,7 +4,7 @@ export interface JobApplicationTypes {
   job_location?: string;
   company_name?: string;
   contact_person?: string;
-  application_url: string;
+  application_url?: string;
   job_type_id?: number | null;
   job_status_id?: number | null;
   job_type?: string;
