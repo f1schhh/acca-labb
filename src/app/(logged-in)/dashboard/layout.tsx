@@ -1,15 +1,21 @@
-"use client";
 import { Box, Container, Divider } from "@mui/material";
 import NavBar from "../../../components/dashboard/NavBar";
 import SideBar from "../../../components/dashboard/SideBar";
-import { usePathname } from "next/navigation";
-
-export default function DashboardLayout({
+import { auth } from "../../../../auth";
+import { redirect } from "next/navigation";
+export default async function DashboardLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
-  const pathname = usePathname();
+  const session = await auth();
+
+  if (!session) {
+    redirect("/login");
+  }
+
+  const name = session?.user?.email;
+
   return (
     <Container
       disableGutters
@@ -18,7 +24,7 @@ export default function DashboardLayout({
       }}
       maxWidth="xl"
     >
-      <NavBar />
+      <NavBar username={name} />
       <Container
         disableGutters
         sx={{
@@ -37,7 +43,7 @@ export default function DashboardLayout({
         maxWidth="xl"
       >
         <Box sx={{ width: { xs: "100%", sm: "100%", md: "20%" } }}>
-          <SideBar currentpath={pathname} />
+          <SideBar />
         </Box>
         <Divider
           orientation="vertical"
