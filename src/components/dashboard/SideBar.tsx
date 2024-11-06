@@ -8,30 +8,22 @@ import DraftsIcon from "@mui/icons-material/Drafts";
 import ArchiveIcon from "@mui/icons-material/Archive";
 import CreateIcon from "@mui/icons-material/Create";
 import HomeIcon from "@mui/icons-material/Home";
+import { usePathname } from "next/navigation";
 
-export default function SideBar({
-  currentpath,
-}: {
-  currentpath: string | null;
-}) {
+export default function SideBar() {
+  const pathname = usePathname();
   return (
     <List
       sx={{ width: "100%", bgcolor: "background.paper" }}
       component="nav"
       aria-labelledby="nested-list-subheader"
       subheader={
-        <ListSubheader
-          component="div"
-          id="nested-list-subheader"
-        >
+        <ListSubheader component="div" id="nested-list-subheader">
           Dashboard
         </ListSubheader>
       }
     >
-      <ListItemButton
-        href="/dashboard"
-        selected={currentpath === "/dashboard"}
-      >
+      <ListItemButton href="/dashboard" selected={pathname === "/dashboard"}>
         <ListItemIcon>
           <HomeIcon />
         </ListItemIcon>
@@ -45,7 +37,7 @@ export default function SideBar({
       </ListItemButton>
       <ListItemButton
         href="/dashboard/archived"
-        selected={currentpath === "/dashboard/archived"}
+        selected={pathname === "/dashboard/archived"}
       >
         <ListItemIcon>
           <ArchiveIcon />
