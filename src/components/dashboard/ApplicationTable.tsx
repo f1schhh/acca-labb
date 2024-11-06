@@ -17,11 +17,13 @@ import ApplicationDialog from "./ApplicationDialog";
 interface ApplicationTableProps {
   applications: JobApplicationTypes[];
   loading?: boolean;
+  onAction: () => void;
 }
 
 const ApplicationTable: React.FC<ApplicationTableProps> = ({
   applications,
   loading,
+  onAction,
 }) => {
   const [openDialog, setOpenDialog] = useState(false);
   const [selectedApplication, setSelectedApplication] =
@@ -47,7 +49,10 @@ const ApplicationTable: React.FC<ApplicationTableProps> = ({
   return (
     <>
       <TableContainer component={Paper}>
-        <Table sx={{ minWidth: 650 }} aria-label="job applications table">
+        <Table
+          sx={{ minWidth: 650 }}
+          aria-label="job applications table"
+        >
           <TableHead>
             <TableRow>
               <TableCell>Job Title</TableCell>
@@ -87,10 +92,18 @@ const ApplicationTable: React.FC<ApplicationTableProps> = ({
                       <Skeleton variant="text" />
                     </TableCell>
                     <TableCell align="right">
-                      <Skeleton variant="circular" width={24} height={24} />
+                      <Skeleton
+                        variant="circular"
+                        width={24}
+                        height={24}
+                      />
                     </TableCell>
                     <TableCell align="right">
-                      <Skeleton variant="circular" width={24} height={24} />
+                      <Skeleton
+                        variant="circular"
+                        width={24}
+                        height={24}
+                      />
                     </TableCell>
                   </TableRow>
                 ))
@@ -99,16 +112,24 @@ const ApplicationTable: React.FC<ApplicationTableProps> = ({
                     key={row.job_title}
                     sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
                   >
-                    <TableCell component="th" scope="row">
+                    <TableCell
+                      component="th"
+                      scope="row"
+                    >
                       {row.job_title}
                     </TableCell>
                     <TableCell>{row.job_location}</TableCell>
                     <TableCell>{row.company_name}</TableCell>
                     <TableCell>{row.contact_person}</TableCell>
                     <TableCell>
-                      <Link href={row.application_url} color="inherit">
-                        {row.application_url}
-                      </Link>
+                      {row.application_url && (
+                        <Link
+                          href={row.application_url}
+                          color="inherit"
+                        >
+                          {row.application_url}
+                        </Link>
+                      )}
                     </TableCell>
                     <TableCell>{row.job_type}</TableCell>
                     <TableCell>{row.job_status}</TableCell>
@@ -137,13 +158,16 @@ const ApplicationTable: React.FC<ApplicationTableProps> = ({
           </TableBody>
         </Table>
       </TableContainer>
-      <ApplicationDialog
-        archive={archive ? true : false}
-        open={openDialog}
-        onClose={handleCloseDialog}
-        title={title}
-        application={selectedApplication}
-      />
+      {!loading && (
+        <ApplicationDialog
+          archive={archive ? true : false}
+          open={openDialog}
+          onClose={handleCloseDialog}
+          onAction={onAction}
+          title={title}
+          application={selectedApplication}
+        />
+      )}
     </>
   );
 };

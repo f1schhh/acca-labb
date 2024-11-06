@@ -8,22 +8,55 @@ import {
   TextField,
 } from "@mui/material";
 import { useState } from "react";
+import { useRouter } from "next/navigation";
+import { signUpAction } from "@/app/lib/actions";
+import { signUpSchema } from "@/app/lib/zod";
 // import { formProps, UserTypes } from "../../types";
 
-// import { signUpAction } from "@/app/lib/actions";
-
 export default function SignUpForm() {
-  const [error, setError] = useState<string | null>(null);
+  const router = useRouter();
+  const [error, setError] = useState<string | null>("");
   const [isLoading, setIsLoading] = useState<boolean>(false);
 
   const handleOnSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
+    setIsLoading(true);
+    setError("");
 
     try {
       const formData = new FormData(event.currentTarget);
-      console.log(formData);
+
+      const validatedFields = signUpSchema.safeParse({
+        firstName: formData.get("firstName"),
+        lastName: formData.get("lastName"),
+        email: formData.get("email"),
+        password: formData.get("password"),
+        confirmPassword: formData.get("confirmPassword"),
+        address: formData.get("address"),
+        zipcode: formData.get("zipcode"),
+        city: formData.get("city"),
+        country: formData.get("country"),
+        phoneNumber: formData.get("phoneNumber"),
+      });
+
+      console.log("2. Validation result:", validatedFields);
+
+      if (!validatedFields.success) {
+        setError(validatedFields.error.errors[0].message);
+        return;
+      }
+
+      const response = await signUpAction(formData);
+
+      if (response?.error) {
+        setError(response.message);
+      } else {
+        console.log("Login successful");
+        router.push("/dashboard");
+      }
     } catch (error) {
-      setError(`Something went wrong: ${error}`);
+      console.log("Error:", error);
+      setError("Failed to login");
     } finally {
       setIsLoading(false);
     }
@@ -40,7 +73,6 @@ export default function SignUpForm() {
           required
           disabled={isLoading}
           error={!!error}
-          fullWidth
         />
         <TextField
           id="lastName-input"
@@ -50,7 +82,6 @@ export default function SignUpForm() {
           required
           disabled={isLoading}
           error={!!error}
-          fullWidth
         />
         <TextField
           id="email-input"
@@ -60,7 +91,6 @@ export default function SignUpForm() {
           required
           disabled={isLoading}
           error={!!error}
-          fullWidth
         />
         <TextField
           id="password-input"
@@ -70,30 +100,15 @@ export default function SignUpForm() {
           required
           disabled={isLoading}
           error={!!error}
-          fullWidth
-          // helperText={
-          //   currentpassword !== null && currentpassword?.length < 12
-          //     ? "Password must be at least 12 characters"
-          //     : ""
-          // }
-          // onChange={(event) => {
-          //   setCurrentPassword(event.target.value);
-          // }}
         />
         <TextField
           id="confirmPassword-input"
           label="Confirm Password"
           type="password"
           name="confirmPassword"
-          // helperText={handlePasswordError() ? "Passwords do not match" : ""}
-          // error={handlePasswordError()}
           required
           disabled={isLoading}
           error={!!error}
-          fullWidth
-          // onChange={(event) => {
-          //   setCurrentConfirmPassword(event.target.value);
-          // }}
         />
         <TextField
           id="address-input"
@@ -103,7 +118,6 @@ export default function SignUpForm() {
           required
           disabled={isLoading}
           error={!!error}
-          fullWidth
         />
         <Box
           sx={{
@@ -121,7 +135,6 @@ export default function SignUpForm() {
             required
             disabled={isLoading}
             error={!!error}
-            fullWidth
           />
 
           <TextField
@@ -132,7 +145,6 @@ export default function SignUpForm() {
             required
             disabled={isLoading}
             error={!!error}
-            fullWidth
           />
         </Box>
         <Box
@@ -151,7 +163,6 @@ export default function SignUpForm() {
             required
             disabled={isLoading}
             error={!!error}
-            fullWidth
           />
 
           <TextField
@@ -162,7 +173,6 @@ export default function SignUpForm() {
             required
             disabled={isLoading}
             error={!!error}
-            fullWidth
           />
         </Box>
         <FormControlLabel

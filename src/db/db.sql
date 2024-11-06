@@ -50,7 +50,36 @@ CREATE TABLE IF NOT EXISTS auth.sessions (
   session_token VARCHAR(255) NOT NULL UNIQUE
 );
 
+INSERT INTO auth.users (
+  first_name,
+  last_name,
+  email,
+  password,
+  address,
+  phone,
+  zipcode,
+  city,
+  country,
+  email_verified,
+  signup_date,
+  last_login_date
+) VALUES (
+  'Test',
+  'User',
+  'testuser@example.com',
+  'mypassword',   -- Replace with an actual hashed password if needed
+  '123 Example St',
+  '1234567890',
+  '12345',
+  'Test City',
+  'Test Country',
+  NULL,                -- Email not verified, so set to NULL
+  CURRENT_TIMESTAMP,   -- Automatically sets to the current time
+  NULL                 -- No last login date, so set to NULL
+);
 
+
+-- Table: jobTypes
 CREATE TABLE jobTypes (
     id SERIAL PRIMARY KEY,
     job_type VARCHAR(50) UNIQUE NOT NULL

@@ -6,6 +6,7 @@ export async function GET(request: NextRequest) {
   try {
     const url = new URL(request.url);
     const id = url.searchParams.get("id");
+    console.log("id", id);
 
     if (id) {
       const user = await getUserById(id);
@@ -68,18 +69,17 @@ export async function getUserById(id: string) {
 export async function POST(request: NextRequest) {
   try {
     const userData = await request.json();
-
+    console.log("userData", userData);
     const hashedPassword = await bcrypt.hash(userData.password, 10);
 
     const client = await pool.connect();
     const result = await client.query(
       `INSERT INTO auth.users
       (first_name, last_name, email, password, address, phone, zipcode, city, country)
-      VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9)
-      RETURNING *`,
+      VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9) RETURNING *`,
       [
-        userData.firstName,
-        userData.lastName,
+        userData.first_name,
+        userData.last_name,
         userData.email,
         hashedPassword,
         userData.address,
@@ -90,16 +90,11 @@ export async function POST(request: NextRequest) {
       ]
     );
     client.release();
+    console.log("Query result:", result.rows[0]);
+
     return NextResponse.json(result.rows[0], { status: 201 });
   } catch (error) {
     console.error("Error creating user:", error);
-    // if (error instanceof Error && error.code === "23505") {
-    //   // Unique violation PostgreSQL error code
-    //   return NextResponse.json(
-    //     { error: "Email already exists" },
-    //     { status: 409 }
-    //   );
-    // }
     return NextResponse.json(
       { error: "Internal server error" },
       { status: 500 }
