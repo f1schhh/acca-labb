@@ -1,4 +1,3 @@
-"use client";
 import { Box, Typography } from "@mui/material";
 
 import SettingsForm from "../../../../components/forms/SettingsForm";

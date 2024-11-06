@@ -1,9 +1,18 @@
 import { Container, Link, Paper, Typography } from "@mui/material";
 import SignInForm from "../../components/forms/SignInForm";
 import siteConfig from "../../config/siteConfig";
+
 import { FormProvider } from "../../components/context/FormContext";
 
-export default function Home() {
+import { auth } from "../../auth";
+import { getUserByEmail } from "../app/api/users/route";
+export default async function Home() {
+  // test
+  const session = await auth();
+  const users = await getUserByEmail(session?.user?.email as string);
+  console.log("Users:", users);
+
+
   return (
     <FormProvider>
       <Container
@@ -16,6 +25,13 @@ export default function Home() {
           gap: 3,
           height: "100vh",
           padding: { xs: 2, sm: 3 },
+
+          borderRadius: 2,
+          textAlign: "center",
+          display: "flex",
+          flexDirection: "column",
+          gap: 1,
+
         }}
       >
         <Typography
@@ -24,6 +40,7 @@ export default function Home() {
         >
           Sign in at {siteConfig.siteName}
         </Typography>
+
         <Paper
           elevation={3}
           sx={{ width: "100%", padding: { xs: 2, sm: 4 }, borderRadius: 2 }}
@@ -52,5 +69,20 @@ export default function Home() {
         </Paper>
       </Container>
     </FormProvider>
+
+        <Typography variant="body1">
+          Forgot your password?{" "}
+          <Link
+            href="/forgot-password"
+            color="inherit"
+            underline="hover"
+            sx={{ fontWeight: 400 }}
+          >
+            RESET PASSWORD HERE
+          </Link>
+        </Typography>
+      </Paper>
+    </Container>
+
   );
 }

@@ -1,47 +1,70 @@
-import { Box, Container, Divider, Typography } from "@mui/material";
-import SideBar from "../../../components/dashboard/SideBar";
+"use client";
+import { useEffect, useState } from "react";
+import { Box, Typography } from "@mui/material";
+import ApplicationCard from "../../../components/dashboard/ApplicationCard";
+import ApplicationTable from "../../../components/dashboard/ApplicationTable";
 
 export default function Dashboard() {
+  const [applications, setApplications] = useState(null);
+  const [error, setError] = useState<string | null>(null);
+  const [loading, setLoading] = useState<boolean>(true);
+
+  const getUserApplications = async () => {
+    setLoading(true);
+    try {
+      const response = await fetch("/api/latestapplications/1");
+      if (!response.ok) {
+        throw new Error("Failed to fetch applications");
+      }
+      const data = await response.json();
+      setApplications(data);
+    } catch (err) {
+      console.error(err);
+      setError("Error fetching applications");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    getUserApplications();
+  }, []);
+
   return (
-    <Container
-      disableGutters
+    <Box
       sx={{
         width: "100%",
         display: "flex",
-        flexDirection: {
-          xs: "column",
-          sm: "column",
-          md: "row",
-          lg: "row",
-          xl: "row",
-        },
-        marginTop: 3,
-        gap: 3,
+        flexDirection: "column",
+        gap: 2,
+        padding: 2,
       }}
-      maxWidth="xl"
     >
-      <Box sx={{ width: { xs: "100%", sm: "100%", md: "20%" } }}>
-        <SideBar />
-      </Box>
-      <Divider
-        orientation="vertical"
-        variant="inset"
-        flexItem
+      <Typography variant="h5">Summary</Typography>
+
+      <Box
         sx={{
-          marginLeft: 0,
-          marginRight: 0,
-          display: {
-            xs: "none",
-            sm: "none",
-            md: "block",
-            lg: "block",
-            xl: "block",
-          },
+          display: "flex",
+          flexDirection: { xs: "column", sm: "row" },
+          gap: 2,
+          marginTop: 2,
         }}
-      />
-      <Box sx={{ width: "80%", padding: 2 }}>
-        <Typography variant="h5">Summary</Typography>
+      >
+        <ApplicationCard />
+        <ApplicationCard />
       </Box>
-    </Container>
+
+      <Typography variant="h5">Latest applications</Typography>
+      <Box>
+        {error ? (
+          <Typography color="error">{error}</Typography>
+        ) : (
+          <ApplicationTable
+            applications={applications || []}
+            loading={loading}
+          />
+        )}
+      </Box>
+    </Box>
   );
 }
