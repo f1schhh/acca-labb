@@ -78,8 +78,8 @@ export async function POST(request: NextRequest) {
       (first_name, last_name, email, password, address, phone, zipcode, city, country)
       VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9) RETURNING *`,
       [
-        userData.firstName,
-        userData.lastName,
+        userData.first_name,
+        userData.last_name,
         userData.email,
         hashedPassword,
         userData.address,
