@@ -14,7 +14,7 @@ export default async function DashboardLayout({
     redirect("/signin");
   }
 
-  const name = session?.user?.email;
+  const name = session?.user?.name;
 
   return (
     <Container
@@ -24,7 +24,7 @@ export default async function DashboardLayout({
       }}
       maxWidth="xl"
     >
-      <NavBar username={name} />
+      <NavBar username={name ?? ""} />
       <Container
         disableGutters
         sx={{
