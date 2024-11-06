@@ -1,5 +1,5 @@
 import { Box, TextField } from "@mui/material";
-import { JobApplicationTypes } from "../../types";
+import { JobApplicationTypes } from "../../../types";
 
 interface ApplicationFormProps {
   applicationData?: JobApplicationTypes;

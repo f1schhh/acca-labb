@@ -3,7 +3,7 @@ import { Box, Typography } from "@mui/material";
 import SettingsForm from "../../../../components/forms/SettingsForm";
 import { useFormContext } from "react-hook-form";
 
-import { UserTypes } from "../../../../types";
+import { UserTypes } from "../../../../../types";
 import { useRef } from "react";
 
 // interface SettingsProps {

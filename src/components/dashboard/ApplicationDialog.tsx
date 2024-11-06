@@ -9,7 +9,7 @@ import {
 import { useTheme } from "@mui/material/styles";
 import useMediaQuery from "@mui/material/useMediaQuery";
 import ApplicationForm from "../forms/ApplicationForm";
-import { JobApplicationTypes } from "../../types";
+import { JobApplicationTypes } from "../../../types";
 
 interface ApplicationDialogProps {
   open: boolean;
@@ -30,11 +30,7 @@ const ApplicationDialog: React.FC<ApplicationDialogProps> = ({
   const fullScreen = useMediaQuery(theme.breakpoints.down("sm"));
 
   return application ? (
-    <Dialog
-      fullScreen={fullScreen}
-      open={open}
-      onClose={onClose}
-    >
+    <Dialog fullScreen={fullScreen} open={open} onClose={onClose}>
       <DialogTitle>{title}</DialogTitle>
       <DialogContent>
         {archive ? (
@@ -47,10 +43,7 @@ const ApplicationDialog: React.FC<ApplicationDialogProps> = ({
       </DialogContent>
       <DialogActions>
         <Button onClick={onClose}>Cancel</Button>
-        <Button
-          onClick={onClose}
-          color="primary"
-        >
+        <Button onClick={onClose} color="primary">
           {archive ? "Archive" : "Save"}
         </Button>
       </DialogActions>

@@ -1,5 +1,5 @@
 "use client";
-import { UserTypes } from "../../types/userTypes";
+import { UserTypes } from "../../../types/userTypes";
 import { useForm, FormProvider as HookFormProvider } from "react-hook-form";
 
 type FormProviderProps = {

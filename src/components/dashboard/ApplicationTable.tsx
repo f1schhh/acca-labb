@@ -10,7 +10,7 @@ import { IconButton, Skeleton } from "@mui/material";
 import ArchiveIcon from "@mui/icons-material/Archive";
 import EditIcon from "@mui/icons-material/Edit";
 import Link from "next/link";
-import { JobApplicationTypes } from "../../types";
+import { JobApplicationTypes } from "../../../types";
 import { useState } from "react";
 import ApplicationDialog from "./ApplicationDialog";
 
@@ -47,10 +47,7 @@ const ApplicationTable: React.FC<ApplicationTableProps> = ({
   return (
     <>
       <TableContainer component={Paper}>
-        <Table
-          sx={{ minWidth: 650 }}
-          aria-label="job applications table"
-        >
+        <Table sx={{ minWidth: 650 }} aria-label="job applications table">
           <TableHead>
             <TableRow>
               <TableCell>Job Title</TableCell>
@@ -90,18 +87,10 @@ const ApplicationTable: React.FC<ApplicationTableProps> = ({
                       <Skeleton variant="text" />
                     </TableCell>
                     <TableCell align="right">
-                      <Skeleton
-                        variant="circular"
-                        width={24}
-                        height={24}
-                      />
+                      <Skeleton variant="circular" width={24} height={24} />
                     </TableCell>
                     <TableCell align="right">
-                      <Skeleton
-                        variant="circular"
-                        width={24}
-                        height={24}
-                      />
+                      <Skeleton variant="circular" width={24} height={24} />
                     </TableCell>
                   </TableRow>
                 ))
@@ -110,20 +99,14 @@ const ApplicationTable: React.FC<ApplicationTableProps> = ({
                     key={row.job_title}
                     sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
                   >
-                    <TableCell
-                      component="th"
-                      scope="row"
-                    >
+                    <TableCell component="th" scope="row">
                       {row.job_title}
                     </TableCell>
                     <TableCell>{row.job_location}</TableCell>
                     <TableCell>{row.company_name}</TableCell>
                     <TableCell>{row.contact_person}</TableCell>
                     <TableCell>
-                      <Link
-                        href={row.application_url}
-                        color="inherit"
-                      >
+                      <Link href={row.application_url} color="inherit">
                         {row.application_url}
                       </Link>
                     </TableCell>

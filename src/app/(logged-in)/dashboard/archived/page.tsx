@@ -1,6 +1,6 @@
-'use client'
-import { Box, Typography } from '@mui/material'
-import TableComponent from '../../../../components/dashboard/TableComponent'
+"use client";
+import { Box, Typography } from "@mui/material";
+import TableComponent from "../../../../components/dashboard/TableComponent";
 
 export default function Archived() {
   return (
@@ -8,5 +8,5 @@ export default function Archived() {
       <Typography variant="h3">Archived</Typography>
       <TableComponent />
     </Box>
-  )
+  );
 }

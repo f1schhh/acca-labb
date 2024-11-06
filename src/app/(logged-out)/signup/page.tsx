@@ -2,7 +2,7 @@
 import { Alert, Container, Link, Paper, Typography } from "@mui/material";
 import SignUpForm from "../../../components/forms/SignUpForm";
 import { useState } from "react";
-import siteConfig from "../../../config/siteConfig";
+import siteConfig from "../../../../config/siteConfig";
 
 export default function SignUp() {
   const [responseMsg, setResponseMsg] = useState<string>("");

@@ -1,60 +1,60 @@
-import * as React from 'react'
-import Table from '@mui/material/Table'
-import TableBody from '@mui/material/TableBody'
-import TableCell from '@mui/material/TableCell'
-import TableContainer from '@mui/material/TableContainer'
-import TableHead from '@mui/material/TableHead'
-import TableRow from '@mui/material/TableRow'
-import Paper from '@mui/material/Paper'
-import { ApplicationTypes } from '../../types/applicationTypes'
+import * as React from "react";
+import Table from "@mui/material/Table";
+import TableBody from "@mui/material/TableBody";
+import TableCell from "@mui/material/TableCell";
+import TableContainer from "@mui/material/TableContainer";
+import TableHead from "@mui/material/TableHead";
+import TableRow from "@mui/material/TableRow";
+import Paper from "@mui/material/Paper";
+import { ApplicationTypes } from "../../../types/applicationTypes";
 
 const rows: ApplicationTypes[] = [
   {
-    jobTitle: 'Developer',
-    jobLocation: 'Gothenburg',
-    companyName: 'IKEA',
-    contactPerson: 'Ingvar Kamprad',
-    applicationUrl: 'IKEA.se',
-    jobType: 'Job',
-    jobStatus: 'Pending',
+    jobTitle: "Developer",
+    jobLocation: "Gothenburg",
+    companyName: "IKEA",
+    contactPerson: "Ingvar Kamprad",
+    applicationUrl: "IKEA.se",
+    jobType: "Job",
+    jobStatus: "Pending",
   },
   {
-    jobTitle: 'Developer',
-    jobLocation: 'Gothenburg',
-    companyName: 'IKEA',
-    contactPerson: 'Ingvar Kamprad',
-    applicationUrl: 'IKEA.se',
-    jobType: 'Job',
-    jobStatus: 'Pending',
+    jobTitle: "Developer",
+    jobLocation: "Gothenburg",
+    companyName: "IKEA",
+    contactPerson: "Ingvar Kamprad",
+    applicationUrl: "IKEA.se",
+    jobType: "Job",
+    jobStatus: "Pending",
   },
   {
-    jobTitle: 'Developer',
-    jobLocation: 'Gothenburg',
-    companyName: 'IKEA',
-    contactPerson: 'Ingvar Kamprad',
-    applicationUrl: 'IKEA.se',
-    jobType: 'Job',
-    jobStatus: 'Pending',
+    jobTitle: "Developer",
+    jobLocation: "Gothenburg",
+    companyName: "IKEA",
+    contactPerson: "Ingvar Kamprad",
+    applicationUrl: "IKEA.se",
+    jobType: "Job",
+    jobStatus: "Pending",
   },
   {
-    jobTitle: 'Developer',
-    jobLocation: 'Gothenburg',
-    companyName: 'IKEA',
-    contactPerson: 'Ingvar Kamprad',
-    applicationUrl: 'IKEA.se',
-    jobType: 'Job',
-    jobStatus: 'Pending',
+    jobTitle: "Developer",
+    jobLocation: "Gothenburg",
+    companyName: "IKEA",
+    contactPerson: "Ingvar Kamprad",
+    applicationUrl: "IKEA.se",
+    jobType: "Job",
+    jobStatus: "Pending",
   },
   {
-    jobTitle: 'Developer',
-    jobLocation: 'Gothenburg',
-    companyName: 'IKEA',
-    contactPerson: 'Ingvar Kamprad',
-    applicationUrl: 'IKEA.se',
-    jobType: 'Job',
-    jobStatus: 'Pending',
+    jobTitle: "Developer",
+    jobLocation: "Gothenburg",
+    companyName: "IKEA",
+    contactPerson: "Ingvar Kamprad",
+    applicationUrl: "IKEA.se",
+    jobType: "Job",
+    jobStatus: "Pending",
   },
-]
+];
 
 export default function BasicTable() {
   return (
@@ -73,7 +73,8 @@ export default function BasicTable() {
           {rows.map((row) => (
             <TableRow
               key={row.jobTitle}
-              sx={{ '&:last-child td, &:last-child th': { border: 0 } }}>
+              sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
+            >
               <TableCell component="th" scope="row">
                 {row.jobTitle}
               </TableCell>
@@ -88,7 +89,7 @@ export default function BasicTable() {
         </TableBody>
       </Table>
     </TableContainer>
-  )
+  );
 }
 
 // const headCells: readonly ApplicationTypes[] = [
