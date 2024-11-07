@@ -29,15 +29,17 @@ const ApplicationTable: React.FC<ApplicationTableProps> = ({
   const [selectedApplication, setSelectedApplication] =
     useState<JobApplicationTypes | null>(null);
   const [title, setTitle] = useState<string>("");
-  const [archive, setArchive] = useState<boolean>(false);
+  const [applicationType, setApplicationType] = useState<string>("");
 
   const handleOpenDialog = (
     application: JobApplicationTypes,
-    title: string
+    title: string,
+    applicationType: string
   ) => {
     setSelectedApplication(application);
     setOpenDialog(true);
     setTitle(title);
+    setApplicationType(applicationType);
   };
 
   const handleCloseDialog = () => {
@@ -136,8 +138,7 @@ const ApplicationTable: React.FC<ApplicationTableProps> = ({
                     <TableCell align="right">
                       <IconButton
                         onClick={() => {
-                          handleOpenDialog(row, "Edit Application");
-                          setArchive(false);
+                          handleOpenDialog(row, "Edit Application", "edit");
                         }}
                       >
                         <EditIcon />
@@ -146,8 +147,11 @@ const ApplicationTable: React.FC<ApplicationTableProps> = ({
                     <TableCell align="right">
                       <IconButton
                         onClick={() => {
-                          handleOpenDialog(row, "Archive Application");
-                          setArchive(true);
+                          handleOpenDialog(
+                            row,
+                            "Archive Application",
+                            "archive"
+                          );
                         }}
                       >
                         <ArchiveIcon />
@@ -160,7 +164,7 @@ const ApplicationTable: React.FC<ApplicationTableProps> = ({
       </TableContainer>
       {!loading && (
         <ApplicationDialog
-          archive={archive ? true : false}
+          applicationType={applicationType}
           open={openDialog}
           onClose={handleCloseDialog}
           onAction={onAction}
