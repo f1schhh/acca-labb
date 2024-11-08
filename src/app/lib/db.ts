@@ -28,7 +28,7 @@ export const query = async (
   params?: (string | number | boolean)[]
 ) => {
   const client = await pool.connect();
-  console.log(client);
+
   try {
     const res = await client.query(text, params);
     return res;
