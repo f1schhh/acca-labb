@@ -1,14 +1,14 @@
-import { NextResponse, NextRequest } from 'next/server'
-import { query } from '../../lib/db'
-import { auth } from '../../../../auth'
+import { NextResponse, NextRequest } from "next/server";
+import { query } from "../../lib/db";
+import { auth } from "../../../../auth";
 
 export async function GET() {
-  const session = await auth()
+  const session = await auth();
 
-  const userId = session?.user.id
+  const userId = session?.user.id;
 
   if (!userId) {
-    return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
+    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
   try {
     const result = await query(
@@ -26,42 +26,43 @@ export async function GET() {
            ORDER BY ja.created_date DESC
            LIMIT 5`,
       [userId]
-    )
+    );
 
-    return NextResponse.json({ success: true, data: result.rows })
+    return NextResponse.json({ success: true, data: result.rows });
   } catch (error) {
-    console.error('Database connection error or query error:', error)
+    console.error("Database connection error or query error:", error);
   }
 }
+
 export async function POST(request: NextRequest) {
-  const session = await auth()
-  const userId = session?.user?.id
+  const session = await auth();
+  const userId = session?.user?.id;
 
   if (!userId) {
-    return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
+    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
 
   try {
-    const applicationData = await request.json()
-    console.log(`VAD ÄR FEL`, applicationData)
+    const applicationData = await request.json();
+    console.log(`VAD ÄR FEL`, applicationData);
 
     // Step 1: Check if job_title already exists in savedJobs
-    let jobTitleId
+    let jobTitleId;
     const checkJobTitleResult = await query(
       `SELECT id FROM savedJobs WHERE job_title = $1 AND user_id = $2`,
       [applicationData.jobTitle, userId]
-    )
+    );
 
     if (checkJobTitleResult.rows.length > 0) {
       // Job title exists, use the existing id
-      jobTitleId = checkJobTitleResult.rows[0].id
+      jobTitleId = checkJobTitleResult.rows[0].id;
     } else {
       // Step 2: Insert job title into savedJobs if it doesn't exist
       const insertJobTitleResult = await query(
         `INSERT INTO savedJobs (job_title) VALUES ($1) RETURNING id`,
         [applicationData.jobTitle]
-      )
-      jobTitleId = insertJobTitleResult.rows[0].id
+      );
+      jobTitleId = insertJobTitleResult.rows[0].id;
     }
 
     // Step 3: Insert into jobApplications using the jobTitleId
@@ -79,12 +80,12 @@ export async function POST(request: NextRequest) {
         applicationData.jobStatus,
         userId, // Use authenticated user's ID
       ]
-    )
+    );
 
     // Return a success response with the inserted data
-    return NextResponse.json({ success: true, data: result.rows[0] })
+    return NextResponse.json({ success: true, data: result.rows[0] });
   } catch (error) {
-    console.error('Database connection error or query error:', error)
-    return NextResponse.json({ error: 'Server error' }, { status: 500 })
+    console.error("Database connection error or query error:", error);
+    return NextResponse.json({ error: "Server error" }, { status: 500 });
   }
 }

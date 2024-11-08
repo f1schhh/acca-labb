@@ -2,6 +2,7 @@ import { NextResponse, NextRequest } from "next/server";
 import { pool } from "../../lib/db";
 import bcrypt from "bcryptjs";
 import { auth } from "../../../../auth";
+import { query } from "../../lib/db";
 
 export async function GET() {
   const session = await auth();
@@ -32,38 +33,49 @@ export async function GET() {
 }
 
 export async function getAllUsers() {
-  const client = await pool.connect();
   try {
-    const result = await client.query("SELECT * FROM auth.users");
-    return result.rows;
-  } finally {
-    client.release();
+    const result = await query(`
+      SELECT
+        id,
+        first_name,
+        last_name,
+        email,
+        address,
+        phone,
+        zipcode,
+        city,
+        country
+      FROM auth.users
+    `);
+    return { success: true, data: result.rows };
+  } catch (error) {
+    console.error("Error fetching users:", error);
+    return { success: false, data: [] };
   }
 }
 
 export async function getUserByEmail(email: string) {
-  const client = await pool.connect();
   try {
-    const result = await client.query(
-      "SELECT * FROM auth.users WHERE email = $1",
-      [email]
-    );
+    const result = await query("SELECT * FROM auth.users WHERE email = $1", [
+      email,
+    ]);
     return result.rows[0] || null;
-  } finally {
-    client.release();
+  } catch (error) {
+    console.error("Error fetching user by email:", error);
+    return null;
   }
 }
 
 export async function getUserById(id: string) {
-  const client = await pool.connect();
   try {
-    const result = await client.query(
+    const result = await query(
       "SELECT id, first_name, last_name, email, address, phone, zipcode, city, country FROM auth.users WHERE id = $1",
       [id]
     );
     return result.rows[0] || null;
-  } finally {
-    client.release();
+  } catch (error) {
+    console.error("Error fetching user by id:", error);
+    return null;
   }
 }
 
@@ -73,8 +85,7 @@ export async function POST(request: NextRequest) {
     console.log("userData", userData);
     const hashedPassword = await bcrypt.hash(userData.password, 10);
 
-    const client = await pool.connect();
-    const result = await client.query(
+    const result = await query(
       `INSERT INTO auth.users
       (first_name, last_name, email, password, address, phone, zipcode, city, country)
       VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9) RETURNING *`,
@@ -90,7 +101,7 @@ export async function POST(request: NextRequest) {
         userData.country,
       ]
     );
-    client.release();
+
     console.log("Query result:", result.rows[0]);
 
     return NextResponse.json(result.rows[0], { status: 201 });
@@ -163,12 +174,11 @@ export async function DELETE() {
   }
   try {
     const userId = session.user.id;
-    const client = await pool.connect();
-    const result = await client.query(
+
+    const result = await query(
       "DELETE FROM auth.users WHERE id = $1 RETURNING *",
       [userId]
     );
-    client.release();
     if (result.rowCount === 0) {
       return NextResponse.json({ error: "User not found" }, { status: 404 });
     }
