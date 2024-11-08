@@ -19,7 +19,7 @@ interface ApplicationDialogProps {
   onAction: () => void;
   application?: JobApplicationTypes | null;
   title: string;
-  archive?: boolean;
+  applicationType: string;
 }
 
 const ApplicationDialog: React.FC<ApplicationDialogProps> = ({
@@ -28,7 +28,7 @@ const ApplicationDialog: React.FC<ApplicationDialogProps> = ({
   onAction,
   application,
   title,
-  archive,
+  applicationType,
 }) => {
   const theme = useTheme();
   const fullScreen = useMediaQuery(theme.breakpoints.down("sm"));
@@ -40,17 +40,30 @@ const ApplicationDialog: React.FC<ApplicationDialogProps> = ({
     event.preventDefault();
 
     try {
-      if (archive) {
+      if (applicationType === "archive") {
         console.log("ARCHIVE");
+        setAlertMsg("Application Archived");
         onClose();
         onAction();
-        return;
       }
-      const formData = new FormData(event.currentTarget);
-      console.log(formData);
+      if (applicationType === "edit") {
+        const formData = new FormData(event.currentTarget);
+        console.log(formData);
+        console.log("EDIT");
+        setAlertMsg("Application Saved");
+        onClose();
+        onAction();
+      }
+      if (applicationType === "create") {
+        const formData = new FormData(event.currentTarget);
+        console.log(formData);
+        console.log("CREATE");
+        setAlertMsg("Application Created");
+        onClose();
+        onAction();
+      }
 
       setShowAlert(true);
-      setAlertMsg("Application Saved");
 
       setTimeout(() => {
         setShowAlert(false);
@@ -68,10 +81,6 @@ const ApplicationDialog: React.FC<ApplicationDialogProps> = ({
         setAlertMsg("");
         setError(false);
       }, 7000);
-    } finally {
-      setAlertMsg("Application Saved");
-      setError(false);
-      setShowAlert(true);
     }
   };
 
@@ -91,12 +100,14 @@ const ApplicationDialog: React.FC<ApplicationDialogProps> = ({
         <form onSubmit={handleOnSubmit}>
           <DialogTitle>{title}</DialogTitle>
           <DialogContent>
-            {archive ? (
+            {applicationType === "archive" ? (
               <Typography variant="body1">
                 Are you sure you want to archive this application?
               </Typography>
-            ) : (
+            ) : applicationType === "edit" ? (
               <ApplicationForm applicationData={application} />
+            ) : (
+              <ApplicationForm />
             )}
           </DialogContent>
           <DialogActions>
@@ -105,7 +116,7 @@ const ApplicationDialog: React.FC<ApplicationDialogProps> = ({
               type="submit"
               color="primary"
             >
-              {archive ? "Archive" : "Save"}
+              {applicationType}
             </Button>
           </DialogActions>
         </form>

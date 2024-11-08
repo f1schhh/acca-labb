@@ -1,6 +1,13 @@
-import { Box, TextField } from "@mui/material";
+import {
+  Box,
+  FormControl,
+  InputLabel,
+  MenuItem,
+  TextField,
+} from "@mui/material";
 import { JobApplicationTypes } from "../../../types";
 import React from "react";
+import SelectInput from "./SelectInput";
 
 interface ApplicationFormProps {
   applicationData?: JobApplicationTypes | null;
@@ -11,7 +18,11 @@ const ApplicationForm: React.FC<ApplicationFormProps> = ({
   applicationData,
 }) => {
   return (
-    <Box sx={{ height: "100%" }}>
+    <Box
+      sx={{
+        height: "100%",
+      }}
+    >
       <TextField
         required
         margin="dense"
@@ -67,28 +78,44 @@ const ApplicationForm: React.FC<ApplicationFormProps> = ({
         variant="standard"
         defaultValue={applicationData?.application_url || ""}
       />
-      <TextField
-        required
-        margin="dense"
-        id="jobType"
-        name="jobType"
-        label="Job type"
-        type="text"
-        fullWidth
-        variant="standard"
-        defaultValue={applicationData?.job_type || ""}
-      />
-      <TextField
-        required
-        margin="dense"
-        id="jobStatus"
-        name="jobStatus"
-        label="Job status"
-        type="text"
-        fullWidth
-        variant="standard"
-        defaultValue={applicationData?.job_status || ""}
-      />
+      <Box
+        sx={{
+          marginTop: 2,
+          display: "flex",
+          flexDirection: "column",
+          gap: 2,
+        }}
+      >
+        <FormControl fullWidth>
+          <InputLabel id="demo-simple-select-label">Job status</InputLabel>
+          <SelectInput
+            label="Job status"
+            name="jobStatus"
+            required
+            defaultValue={applicationData?.job_status_id || 1}
+          >
+            <MenuItem value={1}>Pending</MenuItem>
+            <MenuItem value={2}>Accepted</MenuItem>
+            <MenuItem value={3}>Rejected</MenuItem>
+          </SelectInput>
+        </FormControl>
+
+        <FormControl fullWidth>
+          <InputLabel id="demo-simple-select-label">Job type</InputLabel>
+          <SelectInput
+            label="Job type"
+            name="jobType"
+            required
+            defaultValue={applicationData?.job_status_id || 1}
+          >
+            <MenuItem value={1}>Job</MenuItem>
+            <MenuItem value={2}>Internship</MenuItem>
+            <MenuItem value={3}>Contract</MenuItem>
+            <MenuItem value={4}>Freelance</MenuItem>
+            <MenuItem value={5}>Other</MenuItem>
+          </SelectInput>
+        </FormControl>
+      </Box>
     </Box>
   );
 };

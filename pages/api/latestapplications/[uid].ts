@@ -11,7 +11,12 @@ export default async function handler(
     if (typeof uid === "string") {
       try {
         const { rows } = await query(
-          `SELECT ja.*, sj.job_title, jt.job_type, js.job_status
+          `SELECT ja.*,
+                  sj.job_title,
+                  jt.job_type,
+                  jt.id AS job_type_id,
+                  js.job_status,
+                  js.id AS job_status_id
            FROM jobApplications ja
            JOIN savedJobs sj ON ja.job_title = sj.id
            LEFT JOIN jobTypes jt ON ja.job_type_id = jt.id

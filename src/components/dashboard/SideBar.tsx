@@ -9,47 +9,71 @@ import ArchiveIcon from "@mui/icons-material/Archive";
 import CreateIcon from "@mui/icons-material/Create";
 import HomeIcon from "@mui/icons-material/Home";
 import { usePathname } from "next/navigation";
+import ApplicationDialog from "./ApplicationDialog";
+import { useState } from "react";
 
 export default function SideBar() {
   const pathname = usePathname();
+  const [openDialog, setOpenDialog] = useState(false);
+  const handleOpenDialog = () => {
+    setOpenDialog(true);
+  };
+  const handleCloseDialog = () => {
+    setOpenDialog(false);
+  };
   return (
-    <List
-      sx={{ width: "100%", bgcolor: "background.paper" }}
-      component="nav"
-      aria-labelledby="nested-list-subheader"
-      subheader={
-        <ListSubheader component="div" id="nested-list-subheader">
-          Dashboard
-        </ListSubheader>
-      }
-    >
-      <ListItemButton href="/dashboard" selected={pathname === "/dashboard"}>
-        <ListItemIcon>
-          <HomeIcon />
-        </ListItemIcon>
-        <ListItemText primary="Dashboard" />
-      </ListItemButton>
-      <ListItemButton>
-        <ListItemIcon>
-          <DraftsIcon />
-        </ListItemIcon>
-        <ListItemText primary="Ongoing applications" />
-      </ListItemButton>
-      <ListItemButton
-        href="/dashboard/archived"
-        selected={pathname === "/dashboard/archived"}
+    <>
+      <List
+        sx={{ width: "100%", bgcolor: "background.paper" }}
+        component="nav"
+        aria-labelledby="nested-list-subheader"
+        subheader={
+          <ListSubheader
+            component="div"
+            id="nested-list-subheader"
+          >
+            Dashboard
+          </ListSubheader>
+        }
       >
-        <ListItemIcon>
-          <ArchiveIcon />
-        </ListItemIcon>
-        <ListItemText primary="Archived" />
-      </ListItemButton>
-      <ListItemButton>
-        <ListItemIcon>
-          <CreateIcon />
-        </ListItemIcon>
-        <ListItemText primary="Create a application" />
-      </ListItemButton>
-    </List>
+        <ListItemButton
+          href="/dashboard"
+          selected={pathname === "/dashboard"}
+        >
+          <ListItemIcon>
+            <HomeIcon />
+          </ListItemIcon>
+          <ListItemText primary="Dashboard" />
+        </ListItemButton>
+        <ListItemButton>
+          <ListItemIcon>
+            <DraftsIcon />
+          </ListItemIcon>
+          <ListItemText primary="Ongoing applications" />
+        </ListItemButton>
+        <ListItemButton
+          href="/dashboard/archived"
+          selected={pathname === "/dashboard/archived"}
+        >
+          <ListItemIcon>
+            <ArchiveIcon />
+          </ListItemIcon>
+          <ListItemText primary="Archived" />
+        </ListItemButton>
+        <ListItemButton onClick={handleOpenDialog}>
+          <ListItemIcon>
+            <CreateIcon />
+          </ListItemIcon>
+          <ListItemText primary="Create a application" />
+        </ListItemButton>
+      </List>
+      <ApplicationDialog
+        applicationType="create"
+        open={openDialog}
+        onClose={handleCloseDialog}
+        onAction={handleCloseDialog}
+        title="Create Application"
+      />
+    </>
   );
 }

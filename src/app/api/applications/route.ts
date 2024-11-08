@@ -1,3 +1,4 @@
+
 import { NextResponse } from "next/server";
 import { pool } from "../../lib/db";
 import { auth } from "../../../../auth";
@@ -31,6 +32,6 @@ export async function GET() {
     );
     return NextResponse.json({ success: true, data: result.rows });
   } finally {
-    client.release();
+    client.release()
   }
 }
