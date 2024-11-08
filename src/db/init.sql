@@ -1,15 +1,3 @@
-Skapa mig postgree tabeller för
-- users det ska vara id, first name, last name, email, password, address, phone, zipcode, city, country, signupDate, lastLoginDate
-- job ansökningar(döp de på engelska) - id, jobTitle, jobDescription, jobLocation, companyName,
-jobType(ska vara kopplat till en tabell som heter jobTypes),
-jobStatus(ska vara kopplat till en tabell som heter jobStatus),
-createdDate, lastUpdatedDate
-user_id(ska vara kopplat till en tabell som heter users)
-
-- jobTypes - id, jobType
-- jobStatus - id, jobStatus
-
-
 CREATE SCHEMA IF NOT EXISTS auth;
 
 CREATE TABLE IF NOT EXISTS auth.users (
@@ -96,30 +84,24 @@ CREATE TABLE jobApplications (
 );
 
 
--- 1. Lägg till dummydata i jobTypes
 INSERT INTO jobTypes (job_type) VALUES
 ('Full-Time'),
 ('Part-Time'),
 ('Contract'),
 ('Internship');
 
--- 2. Lägg till dummydata i jobStatus
 INSERT INTO jobStatus (job_status) VALUES
 ('Open'),
 ('Closed'),
 ('In Progress'),
 ('Offered');
 
--- 3. Lägg till dummydata i savedJobs
--- Använd ett befintligt user_id från auth.users-tabellen
 INSERT INTO savedJobs (job_title, user_id) VALUES
 ('Software Engineer', 1),
 ('Data Analyst', 1),
 ('Project Manager', 2),
 ('Frontend Developer', 3);
 
--- 4. Lägg till dummydata i jobApplications
--- Använd befintliga id-värden från savedJobs, jobTypes och jobStatus
 INSERT INTO jobApplications (
     job_title, job_location, company_name, contact_person, application_url,
     job_type_id, job_status_id, created_date, last_updated_date, user_id
@@ -131,7 +113,6 @@ INSERT INTO jobApplications (
 
 
 -- För att testa all data
-
 SELECT
     u.id AS user_id,
     u.first_name || ' ' || u.last_name AS user_name,
