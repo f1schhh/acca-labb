@@ -1,22 +1,23 @@
 import { NextResponse, NextRequest } from "next/server";
 import { pool } from "../../lib/db";
 import bcrypt from "bcryptjs";
+import { auth } from "../../../../auth";
 
-export async function GET(request: NextRequest) {
+export async function GET() {
+  const session = await auth();
+  if (!session?.user) {
+    return Response.json({ error: "Unauthorized" }, { status: 401 });
+  }
   try {
-    const url = new URL(request.url);
-    const id = url.searchParams.get("id");
-    console.log("id", id);
+    const userId = session.user.id;
 
-    if (id) {
-      const user = await getUserById(id);
+    if (userId) {
+      const user = await getUserById(userId);
       if (!user) {
         return NextResponse.json({ error: "User not found" }, { status: 404 });
       }
       return NextResponse.json({ success: true, data: user });
     }
-    const users = await getAllUsers();
-    return NextResponse.json({ success: true, data: users });
   } catch (error) {
     console.error("Database connection error or query error:", error);
     return NextResponse.json(
@@ -155,13 +156,17 @@ export async function PUT(request: NextRequest) {
   }
 }
 
-export async function DELETE(request: NextRequest) {
+export async function DELETE() {
+  const session = await auth();
+  if (!session?.user) {
+    return Response.json({ error: "Unauthorized" }, { status: 401 });
+  }
   try {
-    const { id } = await request.json();
+    const userId = session.user.id;
     const client = await pool.connect();
     const result = await client.query(
       "DELETE FROM auth.users WHERE id = $1 RETURNING *",
-      [id]
+      [userId]
     );
     client.release();
     if (result.rowCount === 0) {
