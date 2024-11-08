@@ -19,7 +19,7 @@ interface ApplicationDialogProps {
   onAction: () => void;
   application?: JobApplicationTypes | null;
   title: string;
-  applicationType: string;
+  applicationType: "archive" | "edit" | "create";
 }
 
 const ApplicationDialog: React.FC<ApplicationDialogProps> = ({
