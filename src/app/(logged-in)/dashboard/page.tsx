@@ -5,18 +5,22 @@ import ApplicationCard from "../../../components/dashboard/ApplicationCard";
 import ApplicationTable from "../../../components/dashboard/ApplicationTable";
 
 export default function Dashboard() {
-  const [applications, setApplications] = useState(null);
+  const [applications, setApplications] = useState([]);
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
 
   const getUserApplications = async () => {
     try {
-      const response = await fetch("/api/latestapplications/1");
+      const response = await fetch("/api/applications");
       if (!response.ok) {
         throw new Error("Failed to fetch applications");
       }
-      const data = await response.json();
-      setApplications(data);
+      const result = await response.json();
+      if (result.data.length === 0) {
+        return;
+      } else {
+        setApplications(result.data);
+      }
     } catch (err) {
       console.error(err);
       setError("Error fetching applications");
@@ -52,19 +56,22 @@ export default function Dashboard() {
         <ApplicationCard />
         <ApplicationCard />
       </Box>
-
-      <Typography variant="h5">Latest applications</Typography>
-      <Box>
-        {error ? (
-          <Typography color="error">{error}</Typography>
-        ) : (
-          <ApplicationTable
-            applications={applications || []}
-            loading={loading}
-            onAction={() => getUserApplications()}
-          />
-        )}
-      </Box>
+      {applications && applications.length > 0 && (
+        <>
+          <Typography variant="h5">Latest applications</Typography>
+          <Box>
+            {error ? (
+              <Typography color="error">{error}</Typography>
+            ) : (
+              <ApplicationTable
+                applications={applications}
+                loading={loading}
+                onAction={() => getUserApplications()}
+              />
+            )}
+          </Box>
+        </>
+      )}
     </Box>
   );
 }
