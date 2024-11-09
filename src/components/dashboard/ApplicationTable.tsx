@@ -29,12 +29,14 @@ const ApplicationTable: React.FC<ApplicationTableProps> = ({
   const [selectedApplication, setSelectedApplication] =
     useState<JobApplicationTypes | null>(null);
   const [title, setTitle] = useState<string>("");
-  const [applicationType, setApplicationType] = useState<string>("");
+  const [applicationType, setApplicationType] = useState<
+    "archive" | "edit" | "create"
+  >("edit");
 
   const handleOpenDialog = (
     application: JobApplicationTypes,
     title: string,
-    applicationType: string
+    applicationType: "archive" | "edit" | "create"
   ) => {
     setSelectedApplication(application);
     setOpenDialog(true);

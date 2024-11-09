@@ -2,14 +2,7 @@ import { Container, Link, Paper, Typography } from "@mui/material";
 import SignInForm from "../../../components/forms/SignInForm";
 import siteConfig from "../../../../config/siteConfig";
 
-import { auth } from "../../../../auth";
-import { getUserByEmail } from "../../api/users/route";
 export default async function Home() {
-  // test
-  const session = await auth();
-  const users = await getUserByEmail(session?.user?.email as string);
-  console.log("Users:", users);
-
   return (
     <Container
       maxWidth="sm"
@@ -21,12 +14,8 @@ export default async function Home() {
         gap: 3,
         height: "100vh",
         padding: { xs: 2, sm: 3 },
-
         borderRadius: 2,
         textAlign: "center",
-        display: "flex",
-        flexDirection: "column",
-        gap: 1,
       }}
     >
       <Typography

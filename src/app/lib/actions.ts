@@ -2,10 +2,9 @@
 
 import { auth, signIn, signOut } from "../../../auth";
 import { signUpSchema, changePasswordSchema } from "./zod";
+
 export async function loginWithCredentials(formData: FormData) {
   try {
-    console.log("Attempting login with:", formData.get("email"));
-
     const response = await signIn("credentials", {
       email: formData.get("email") as string,
       password: formData.get("password") as string,

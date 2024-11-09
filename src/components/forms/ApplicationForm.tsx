@@ -6,7 +6,7 @@ import {
   TextField,
 } from "@mui/material";
 import { JobApplicationTypes } from "../../../types";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import SelectInput from "./SelectInput";
 
 interface ApplicationFormProps {
@@ -14,9 +14,44 @@ interface ApplicationFormProps {
   onSave?: boolean;
 }
 
+interface AllJobs {
+  id: number;
+  job_type?: string;
+  job_status?: string;
+}
+
 const ApplicationForm: React.FC<ApplicationFormProps> = ({
   applicationData,
 }) => {
+  const [jobTypesArr, setJobTypesArr] = useState([]);
+  const [jobStatusArr, setJobStatussArr] = useState([]);
+  const fetchAllJobs = async () => {
+    try {
+      const [jobTypesResponse, jobStatusResponse] = await Promise.all([
+        fetch("/api/jobs/types"),
+        fetch("/api/jobs/status"),
+      ]);
+
+      if (!jobTypesResponse.ok || !jobStatusResponse.ok) {
+        throw new Error("Failed to fetch job data");
+      }
+
+      const jobTypes = await jobTypesResponse.json();
+      const jobStatus = await jobStatusResponse.json();
+
+      console.log(jobTypes.data, jobStatus.data);
+
+      setJobTypesArr(jobTypes.data);
+      setJobStatussArr(jobStatus.data);
+    } catch (err) {
+      console.error(err);
+    }
+  };
+
+  useEffect(() => {
+    fetchAllJobs();
+  }, []);
+
   return (
     <Box
       sx={{
@@ -94,9 +129,14 @@ const ApplicationForm: React.FC<ApplicationFormProps> = ({
             required
             defaultValue={applicationData?.job_status_id || 1}
           >
-            <MenuItem value={1}>Pending</MenuItem>
-            <MenuItem value={2}>Accepted</MenuItem>
-            <MenuItem value={3}>Rejected</MenuItem>
+            {jobStatusArr.map((jobStatus: AllJobs) => (
+              <MenuItem
+                key={jobStatus.id}
+                value={jobStatus.id}
+              >
+                {jobStatus.job_status}
+              </MenuItem>
+            ))}
           </SelectInput>
         </FormControl>
 
@@ -106,13 +146,16 @@ const ApplicationForm: React.FC<ApplicationFormProps> = ({
             label="Job type"
             name="jobType"
             required
-            defaultValue={applicationData?.job_status_id || 1}
+            defaultValue={applicationData?.job_type_id || 1}
           >
-            <MenuItem value={1}>Job</MenuItem>
-            <MenuItem value={2}>Internship</MenuItem>
-            <MenuItem value={3}>Contract</MenuItem>
-            <MenuItem value={4}>Freelance</MenuItem>
-            <MenuItem value={5}>Other</MenuItem>
+            {jobTypesArr.map((jobType: AllJobs) => (
+              <MenuItem
+                key={jobType.id}
+                value={jobType.id}
+              >
+                {jobType.job_type}
+              </MenuItem>
+            ))}
           </SelectInput>
         </FormControl>
       </Box>
