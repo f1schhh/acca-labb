@@ -10,6 +10,23 @@ export const signInSchema = object({
     .max(32, "Password must be less than 32 characters"),
 });
 
+export const changePasswordSchema = object({
+  currentPassword: string({ required_error: "Password is required" })
+    .min(1, "Password is required")
+    .min(8, "Password must be more than 8 characters"),
+  newPassword: string({ required_error: "New password" })
+    .min(1, "Password is required")
+    .min(8, "Password must be more than 8 characters")
+    .max(32, "Password must be less than 32 characters"),
+  confirmNewPassword: string({ required_error: "Confirm" })
+    .min(1, "Password is required")
+    .min(8, "Password must be more than 8 characters")
+    .max(32, "Password must be less than 32 characters"),
+}).refine((data) => data.newPassword === data.confirmNewPassword, {
+  message: "Passwords don't match",
+  path: ["confirmNewPassword"],
+});
+
 export const signUpSchema = object({
   firstName: string()
     .min(2, "First name must be at least 2 characters")

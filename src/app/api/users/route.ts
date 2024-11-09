@@ -68,8 +68,10 @@ export async function getUserByEmail(email: string) {
 
 export async function getUserById(id: string) {
   try {
+
     const result = await query(
-      "SELECT id, first_name, last_name, email, address, phone, zipcode, city, country FROM auth.users WHERE id = $1",
+      "SELECT id, first_name, last_name, email, password, address, phone, zipcode, city, country FROM auth.users WHERE id = $1",
+
       [id]
     );
     return result.rows[0] || null;
@@ -118,8 +120,16 @@ export async function PUT(request: NextRequest) {
   try {
     const userData = await request.json();
     const client = await pool.connect();
+    let query, params;
 
-    let query = `UPDATE auth.users SET
+    if (userData.status === "password") {
+      console.log("inne i query");
+      query = `UPDATE auth.users SET
+      password = $1 WHERE id = $2`;
+
+      params = [userData.password, userData.id];
+    } else {
+      query = `UPDATE auth.users SET
       first_name = $1,
       last_name = $2,
       email = $3,
@@ -129,17 +139,17 @@ export async function PUT(request: NextRequest) {
       city = $7,
       country = $8`;
 
-    const params = [
-      userData.firstName,
-      userData.lastName,
-      userData.email,
-      userData.address,
-      userData.phoneNumber,
-      userData.zipcode,
-      userData.city,
-      userData.country,
-    ];
-
+      params = [
+        userData.firstName,
+        userData.lastName,
+        userData.email,
+        userData.address,
+        userData.phoneNumber,
+        userData.zipcode,
+        userData.city,
+        userData.country,
+      ];
+    }
     // If password is being updated, hash it
     if (userData.password) {
       const hashedPassword = await bcrypt.hash(userData.password, 10);

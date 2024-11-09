@@ -1,52 +1,24 @@
-"use client";
-import { Box, Button, Typography } from "@mui/material";
+import { Button, Container } from "@mui/material";
 import SettingsForm from "../../../../components/forms/SettingsForm";
-import { UserTypes } from "../../../../../types/userTypes";
-import { useEffect, useState } from "react";
+import { auth } from "../../../../../auth";
+import { redirect } from "next/navigation";
+import { getUserById } from "@/app/api/users/route";
 
-// interface SettingsProps {
-//   id: number;
-// }
+export default async function Settings() {
+  const session = await auth();
 
-export default function Settings() {
-  const [userData, setUserData] = useState<UserTypes>();
-
-  async function getUsers() {
-    const res = await fetch(`/api/users/`);
-    const data: UserTypes = await res.json();
-    setUserData(data);
-    console.log(data);
+  if (!session?.user) {
+    return redirect("/signin");
   }
 
-  //TODO: Fix the endpoint with id.
+  const userId = session?.user?.id;
 
-  useEffect(() => {
-    getUsers();
-  }, []);
+  const userData = await getUserById(userId as string);
+
   return (
-    <>
-      \Testar att använda datan \
-      {userData && (
-        <Typography variant="h3">{userData.data[0].first_name}</Typography>
-      )}
-      <Box
-        sx={{
-          display: "flex",
-          flexDirection: "column",
-          justifyContent: "center",
-          alignItems: "center",
-          gap: 2,
-          height: "100vh",
-        }}
-      >
-        <Typography variant="h5">Settings</Typography>
-        <form>
-          <SettingsForm />
-          <Button type="submit" variant="outlined">
-            Spara
-          </Button>
-        </form>
-      </Box>
-    </>
+    <Container maxWidth="lg">
+      {userData && <SettingsForm userData={userData} />}
+      <Button type="button">Delete account</Button>
+    </Container>
   );
 }
