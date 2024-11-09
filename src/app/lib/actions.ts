@@ -1,7 +1,7 @@
 "use server";
 
-import { signIn, signOut } from "../../../auth";
-import { signUpSchema } from "./zod";
+import { auth, signIn, signOut } from "../../../auth";
+import { signUpSchema, changePasswordSchema } from "./zod";
 export async function loginWithCredentials(formData: FormData) {
   try {
     console.log("Attempting login with:", formData.get("email"));
@@ -92,6 +92,56 @@ export async function signUpAction(formData: FormData) {
       error:
         error instanceof Error ? error.message : "Failed to create account",
     };
+  }
+}
+
+export async function changePasswordAction(formData: FormData) {
+  const session = await auth();
+  if (!session) {
+    return { error: "You must be logged in to change your password" };
+  }
+
+  try {
+    const validatedFields = changePasswordSchema.safeParse({
+      currentPassword: formData.get("password"),
+      newPassword: formData.get("password"),
+      confirmNewPassword: formData.get("confirmPassword"),
+    });
+
+    if (!validatedFields.success) {
+      return {
+        error: validatedFields.error.errors[0].message,
+      };
+    }
+
+    const userId = session?.user?.id;
+    const { confirmNewPassword } = validatedFields.data;
+
+    const dbData = {
+      id: userId,
+      password: confirmNewPassword,
+      status: "password",
+    };
+
+    const baseUrl = process.env.NEXTAUTH_URL || "http://localhost:3000";
+    const response = await fetch(`${baseUrl}/api/users`, {
+      method: "PUT",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(dbData),
+    });
+
+    if (!response.ok) {
+      const error = await response.json();
+      return { error: error.message || "Failed to create account" };
+    }
+  } catch (error) {
+    console.error("Signup error:", error);
+    return {
+      error:
+        error instanceof Error ? error.message : "Failed to create account",
+    };
+  } finally {
+    await signOutAction();
   }
 }
 

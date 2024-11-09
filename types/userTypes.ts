@@ -1,12 +1,11 @@
 export interface UserTypes {
-  firstName?: string;
-  lastName?: string;
+  first_name?: string;
+  last_name?: string;
   email: string;
   password: string;
-  confirmPassword?: string;
   address?: string;
   zipcode?: string;
-  phoneNumber?: string;
+  phone?: string;
   country?: string;
   city?: string;
 }
