@@ -59,8 +59,8 @@ export async function POST(request: NextRequest) {
     } else {
       // Step 2: Insert job title into savedJobs if it doesn't exist
       const insertJobTitleResult = await query(
-        `INSERT INTO savedJobs (job_title) VALUES ($1) RETURNING id`,
-        [applicationData.jobTitle]
+        `INSERT INTO savedJobs (job_title, user_id) VALUES ($1, $2) RETURNING id`,
+        [applicationData.jobTitle, userId]
       );
       jobTitleId = insertJobTitleResult.rows[0].id;
     }
