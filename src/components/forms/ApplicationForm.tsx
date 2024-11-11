@@ -8,6 +8,7 @@ import {
 import { JobApplicationTypes } from "../../../types";
 import React, { useEffect, useState } from "react";
 import SelectInput from "./SelectInput";
+import AutocompleteInput from "./AutocompleteInput";
 
 interface ApplicationFormProps {
   applicationData?: JobApplicationTypes | null;
@@ -25,12 +26,18 @@ const ApplicationForm: React.FC<ApplicationFormProps> = ({
 }) => {
   const [jobTypesArr, setJobTypesArr] = useState([]);
   const [jobStatusArr, setJobStatussArr] = useState([]);
+  const [jobSavedArr, setJobSavedArr] = useState([]);
+  const [loading, setLoading] = useState(false);
+
   const fetchAllJobs = async () => {
     try {
-      const [jobTypesResponse, jobStatusResponse] = await Promise.all([
-        fetch("/api/jobs/types"),
-        fetch("/api/jobs/status"),
-      ]);
+      setLoading(true);
+      const [jobTypesResponse, jobStatusResponse, jobSavedResponse] =
+        await Promise.all([
+          fetch("/api/jobs/types"),
+          fetch("/api/jobs/status"),
+          fetch("/api/jobs/saved"),
+        ]);
 
       if (!jobTypesResponse.ok || !jobStatusResponse.ok) {
         throw new Error("Failed to fetch job data");
@@ -38,13 +45,17 @@ const ApplicationForm: React.FC<ApplicationFormProps> = ({
 
       const jobTypes = await jobTypesResponse.json();
       const jobStatus = await jobStatusResponse.json();
+      const jobSaved = await jobSavedResponse.json();
 
-      console.log(jobTypes.data, jobStatus.data);
+      console.log(jobTypes.data, jobStatus.data, jobSaved.data);
 
       setJobTypesArr(jobTypes.data);
       setJobStatussArr(jobStatus.data);
+      setJobSavedArr(jobSaved.data);
     } catch (err) {
       console.error(err);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -58,16 +69,23 @@ const ApplicationForm: React.FC<ApplicationFormProps> = ({
         height: "100%",
       }}
     >
-      <TextField
-        required
-        margin="dense"
-        id="jobTitle"
-        name="jobTitle"
-        label="Job title"
-        type="text"
-        fullWidth
-        variant="standard"
-        defaultValue={applicationData?.job_title || ""}
+      <AutocompleteInput
+        options={jobSavedArr || []}
+        loading={loading}
+        defaultValue={
+          applicationData?.job_title
+            ? { job_title: applicationData.job_title.toString() }
+            : { job_title: "" }
+        }
+        renderInput={(params) => (
+          <TextField
+            {...params}
+            required
+            margin="dense"
+            name="jobTitle"
+            label="Job title"
+          />
+        )}
       />
       <TextField
         required
@@ -77,7 +95,6 @@ const ApplicationForm: React.FC<ApplicationFormProps> = ({
         label="Location"
         type="text"
         fullWidth
-        variant="standard"
         defaultValue={applicationData?.job_location || ""}
       />
       <TextField
@@ -88,7 +105,6 @@ const ApplicationForm: React.FC<ApplicationFormProps> = ({
         label="Company name"
         type="text"
         fullWidth
-        variant="standard"
         defaultValue={applicationData?.company_name || ""}
       />
       <TextField
@@ -99,7 +115,6 @@ const ApplicationForm: React.FC<ApplicationFormProps> = ({
         label="Contact person"
         type="text"
         fullWidth
-        variant="standard"
         defaultValue={applicationData?.contact_person || ""}
       />
       <TextField
@@ -110,7 +125,6 @@ const ApplicationForm: React.FC<ApplicationFormProps> = ({
         label="Application URL"
         type="text"
         fullWidth
-        variant="standard"
         defaultValue={applicationData?.application_url || ""}
       />
       <Box
