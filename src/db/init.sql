@@ -99,8 +99,8 @@ INSERT INTO jobStatus (job_status) VALUES
 INSERT INTO savedJobs (job_title, user_id) VALUES
 ('Software Engineer', 1),
 ('Data Analyst', 1),
-('Project Manager', 2),
-('Frontend Developer', 3);
+('Project Manager', 1),
+('Frontend Developer', 1);
 
 INSERT INTO jobApplications (
     job_title, job_location, company_name, contact_person, application_url,
@@ -108,8 +108,8 @@ INSERT INTO jobApplications (
 ) VALUES
 (1, 'Stockholm', 'Tech AB', 'Anna Svensson', 'https://example.com/apply/1', 1, 1, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 1),
 (2, 'Göteborg', 'DataCorp', 'Erik Johansson', 'https://example.com/apply/2', 2, 2, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 1),
-(3, 'Malmö', 'Innovatech', 'Sara Karlsson', 'https://example.com/apply/3', 3, 3, CURRENT_TIMESTAMP, NULL, 2),
-(4, 'Uppsala', 'Frontendify', 'Johan Berg', 'https://example.com/apply/4', 4, 1, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 3);
+(3, 'Malmö', 'Innovatech', 'Sara Karlsson', 'https://example.com/apply/3', 3, 3, CURRENT_TIMESTAMP, NULL, 1),
+(4, 'Uppsala', 'Frontendify', 'Johan Berg', 'https://example.com/apply/4', 4, 1, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 1);
 
 
 -- Funktion för att ta bort all data när en användare raderas
