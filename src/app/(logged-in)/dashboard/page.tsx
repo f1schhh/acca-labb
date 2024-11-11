@@ -10,7 +10,12 @@ export default function Dashboard() {
 
   const numOfApplications = applications ? applications.length : 0;
 
-  const numOfOngoingApplications = applications ? applications.length : 0;
+  const latestApplication = applications
+    ? applications[numOfApplications - 1]
+    : null;
+  const company_name = latestApplication?.company_name;
+  const job_title = latestApplication?.job_title;
+
   return (
     <Box
       sx={{
@@ -31,13 +36,11 @@ export default function Dashboard() {
           marginTop: 2,
         }}
       >
+        <SummaryCard title="Total applications" stat={numOfApplications} />
         <SummaryCard
-          title="Total applications"
-          stat={numOfApplications}
-        />
-        <SummaryCard
-          title="Ongoing applications"
-          stat={numOfOngoingApplications}
+          title="Latest applications"
+          jobbTitle={job_title}
+          companyTitle={company_name}
         />
       </Box>
       {loading && (
