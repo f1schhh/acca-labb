@@ -186,37 +186,47 @@ export async function PATCH(request: NextRequest) {
     const params = [];
 
     const updates = [];
+    let index = 1; // Start index for parameter placeholders
+
     if (userData.first_name) {
-      updates.push("first_name = $1");
+      updates.push(`first_name = $${index}`);
       params.push(userData.first_name);
+      index++;
     }
     if (userData.last_name) {
-      updates.push("last_name = $2");
+      updates.push(`last_name = $${index}`);
       params.push(userData.last_name);
+      index++;
     }
     if (userData.email) {
-      updates.push("email = $3");
+      updates.push(`email = $${index}`);
       params.push(userData.email);
+      index++;
     }
     if (userData.address) {
-      updates.push("address = $4");
+      updates.push(`address = $${index}`);
       params.push(userData.address);
+      index++;
     }
     if (userData.phone) {
-      updates.push("phone = $5");
+      updates.push(`phone = $${index}`);
       params.push(userData.phone);
+      index++;
     }
     if (userData.zipcode) {
-      updates.push("zipcode = $6");
+      updates.push(`zipcode = $${index}`);
       params.push(userData.zipcode);
+      index++;
     }
     if (userData.city) {
-      updates.push("city = $7");
+      updates.push(`city = $${index}`);
       params.push(userData.city);
+      index++;
     }
     if (userData.country) {
-      updates.push("country = $8");
+      updates.push(`country = $${index}`);
       params.push(userData.country);
+      index++;
     }
 
     if (updates.length === 0) {
@@ -227,17 +237,17 @@ export async function PATCH(request: NextRequest) {
     }
 
     updateQuery +=
-      updates.join(", ") + ` WHERE id = $${params.length + 1} RETURNING *`;
+      updates.join(", ") + ` WHERE id = $${params.length + 1}  RETURNING *`;
     params.push(userId);
 
     console.log("Params:" + typeof params, "UpdateQuey:" + updateQuery);
-
+    console.table(updateQuery);
     const result = await query(updateQuery, params);
 
     if (result.rowCount === 0) {
       return NextResponse.json({ error: "User not found" }, { status: 404 });
     }
-
+    console.log(result);
     return NextResponse.json(result.rows[0]);
   } catch (error) {
     console.error("Error updating user:", error);

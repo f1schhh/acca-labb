@@ -14,8 +14,8 @@ import { updateProfileAction } from "@/app/lib/actions";
 export default function ProfileForm({ userData }: { userData: UserTypes }) {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState("");
-
-  console.log(userData);
+  const [updatedValues, setUpdatedValues] =
+    useState<Partial<UserTypes>>(userData);
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -49,8 +49,7 @@ export default function ProfileForm({ userData }: { userData: UserTypes }) {
         setError(response.error);
         console.log(error);
       } else {
-        console.log("Profile updated successfully");
-        console.log(response);
+        setUpdatedValues(response.data);
       }
     } catch (error) {
       console.error("Error:", error);
@@ -76,7 +75,7 @@ export default function ProfileForm({ userData }: { userData: UserTypes }) {
               type="text"
               name="firstName"
               required
-              defaultValue={userData.first_name}
+              defaultValue={updatedValues.first_name}
             />
             <TextField
               id="lastName-input"

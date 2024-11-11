@@ -212,7 +212,7 @@ export async function updateProfileAction(
       }),
     });
 
-    console.log(response);
+    console.log("response from action", response);
 
     return { success: true, data: await response.json() };
   } catch (error) {
