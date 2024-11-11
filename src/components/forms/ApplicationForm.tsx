@@ -47,8 +47,6 @@ const ApplicationForm: React.FC<ApplicationFormProps> = ({
       const jobStatus = await jobStatusResponse.json();
       const jobSaved = await jobSavedResponse.json();
 
-      console.log(jobTypes.data, jobStatus.data, jobSaved.data);
-
       setJobTypesArr(jobTypes.data);
       setJobStatussArr(jobStatus.data);
       setJobSavedArr(jobSaved.data);
@@ -69,110 +67,114 @@ const ApplicationForm: React.FC<ApplicationFormProps> = ({
         height: "100%",
       }}
     >
-      <AutocompleteInput
-        options={jobSavedArr || []}
-        loading={loading}
-        defaultValue={
-          applicationData?.job_title
-            ? { job_title: applicationData.job_title.toString() }
-            : { job_title: "" }
-        }
-        renderInput={(params) => (
+      {!loading && (
+        <>
+          <AutocompleteInput
+            options={jobSavedArr || []}
+            loading={loading}
+            defaultValue={
+              applicationData?.job_title
+                ? { job_title: applicationData.job_title.toString() }
+                : { job_title: "" }
+            }
+            renderInput={(params) => (
+              <TextField
+                {...params}
+                required
+                margin="dense"
+                name="jobTitle"
+                label="Job title"
+              />
+            )}
+          />
           <TextField
-            {...params}
             required
             margin="dense"
-            name="jobTitle"
-            label="Job title"
+            id="location"
+            name="location"
+            label="Location"
+            type="text"
+            fullWidth
+            defaultValue={applicationData?.job_location || ""}
           />
-        )}
-      />
-      <TextField
-        required
-        margin="dense"
-        id="location"
-        name="location"
-        label="Location"
-        type="text"
-        fullWidth
-        defaultValue={applicationData?.job_location || ""}
-      />
-      <TextField
-        required
-        margin="dense"
-        id="companyName"
-        name="companyName"
-        label="Company name"
-        type="text"
-        fullWidth
-        defaultValue={applicationData?.company_name || ""}
-      />
-      <TextField
-        required
-        margin="dense"
-        id="contactPerson"
-        name="contactPerson"
-        label="Contact person"
-        type="text"
-        fullWidth
-        defaultValue={applicationData?.contact_person || ""}
-      />
-      <TextField
-        required
-        margin="dense"
-        id="applicationUrl"
-        name="applicationUrl"
-        label="Application URL"
-        type="text"
-        fullWidth
-        defaultValue={applicationData?.application_url || ""}
-      />
-      <Box
-        sx={{
-          marginTop: 2,
-          display: "flex",
-          flexDirection: "column",
-          gap: 2,
-        }}
-      >
-        <FormControl fullWidth>
-          <InputLabel id="demo-simple-select-label">Job status</InputLabel>
-          <SelectInput
-            label="Job status"
-            name="jobStatus"
+          <TextField
             required
-            defaultValue={applicationData?.job_status_id || 1}
+            margin="dense"
+            id="companyName"
+            name="companyName"
+            label="Company name"
+            type="text"
+            fullWidth
+            defaultValue={applicationData?.company_name || ""}
+          />
+          <TextField
+            required
+            margin="dense"
+            id="contactPerson"
+            name="contactPerson"
+            label="Contact person"
+            type="text"
+            fullWidth
+            defaultValue={applicationData?.contact_person || ""}
+          />
+          <TextField
+            required
+            margin="dense"
+            id="applicationUrl"
+            name="applicationUrl"
+            label="Application URL"
+            type="text"
+            fullWidth
+            defaultValue={applicationData?.application_url || ""}
+          />
+          <Box
+            sx={{
+              marginTop: 2,
+              display: "flex",
+              flexDirection: "column",
+              gap: 2,
+            }}
           >
-            {jobStatusArr.map((jobStatus: AllJobs) => (
-              <MenuItem
-                key={jobStatus.id}
-                value={jobStatus.id}
+            <FormControl fullWidth>
+              <InputLabel id="demo-simple-select-label">Job status</InputLabel>
+              <SelectInput
+                label="Job status"
+                name="jobStatus"
+                required
+                defaultValue={applicationData?.job_status_id || 1}
               >
-                {jobStatus.job_status}
-              </MenuItem>
-            ))}
-          </SelectInput>
-        </FormControl>
+                {jobStatusArr.map((jobStatus: AllJobs) => (
+                  <MenuItem
+                    key={jobStatus.id}
+                    value={jobStatus.id}
+                  >
+                    {jobStatus.job_status}
+                  </MenuItem>
+                ))}
+              </SelectInput>
+            </FormControl>
 
-        <FormControl fullWidth>
-          <InputLabel id="demo-simple-select-label">Job type</InputLabel>
-          <SelectInput
-            label="Job type"
-            name="jobType"
-            required
-            defaultValue={applicationData?.job_type_id || 1}
-          >
-            {jobTypesArr.map((jobType: AllJobs) => (
-              <MenuItem
-                key={jobType.id}
-                value={jobType.id}
+            <FormControl fullWidth>
+              <InputLabel id="demo-simple-select-label">Job type</InputLabel>
+              <SelectInput
+                label="Job type"
+                name="jobType"
+                required
+                defaultValue={applicationData?.job_type_id || 1}
               >
-                {jobType.job_type}
-              </MenuItem>
-            ))}
-          </SelectInput>
-        </FormControl>
-      </Box>
+                {jobTypesArr.map((jobType: AllJobs) => (
+                  <MenuItem
+                    key={jobType.id}
+                    value={jobType.id}
+                  >
+                    {jobType.job_type}
+                  </MenuItem>
+                ))}
+              </SelectInput>
+            </FormControl>
+          </Box>
+        </>
+      )}
     </Box>
   );
 };
