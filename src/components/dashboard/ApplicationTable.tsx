@@ -51,10 +51,7 @@ const ApplicationTable: React.FC<ApplicationTableProps> = ({
   return (
     <>
       <TableContainer component={Paper}>
-        <Table
-          sx={{ minWidth: 650 }}
-          aria-label="job applications table"
-        >
+        <Table sx={{ minWidth: 650 }} aria-label="job applications table">
           <TableHead>
             <TableRow>
               <TableCell>Job Title</TableCell>
@@ -72,12 +69,8 @@ const ApplicationTable: React.FC<ApplicationTableProps> = ({
             {applications.map((row) => (
               <TableRow
                 key={row.job_title}
-                sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
-              >
-                <TableCell
-                  component="th"
-                  scope="row"
-                >
+                sx={{ "&:last-child td, &:last-child th": { border: 0 } }}>
+                <TableCell component="th" scope="row">
                   {row.job_title}
                 </TableCell>
                 <TableCell>{row.job_location}</TableCell>
@@ -85,10 +78,7 @@ const ApplicationTable: React.FC<ApplicationTableProps> = ({
                 <TableCell>{row.contact_person}</TableCell>
                 <TableCell>
                   {row.application_url && (
-                    <Link
-                      href={row.application_url}
-                      color="inherit"
-                    >
+                    <Link href={row.application_url} color="inherit">
                       {row.application_url}
                     </Link>
                   )}
@@ -99,8 +89,7 @@ const ApplicationTable: React.FC<ApplicationTableProps> = ({
                   <IconButton
                     onClick={() => {
                       handleOpenDialog(row, "Edit Application", "edit");
-                    }}
-                  >
+                    }}>
                     <EditIcon />
                   </IconButton>
                 </TableCell>
@@ -108,8 +97,7 @@ const ApplicationTable: React.FC<ApplicationTableProps> = ({
                   <IconButton
                     onClick={() => {
                       handleOpenDialog(row, "Archive Application", "archive");
-                    }}
-                  >
+                    }}>
                     <ArchiveIcon />
                   </IconButton>
                 </TableCell>
