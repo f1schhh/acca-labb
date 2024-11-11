@@ -1,11 +1,14 @@
 "use client";
 import React, { createContext, useContext, useState, useEffect } from "react";
+import { usePathname } from "next/navigation";
 import { JobApplicationTypes } from "../../../../types";
 
 interface ApplicationsContextProps {
   applications: JobApplicationTypes[];
   refreshApplications: () => void;
   loading: boolean;
+  setCurrentPage: (page: number) => void;
+  totalCount: number;
 }
 
 const ApplicationsContext = createContext<ApplicationsContextProps | undefined>(
@@ -17,12 +20,19 @@ export const ApplicationsProvider: React.FC<{ children: React.ReactNode }> = ({
 }) => {
   const [applications, setApplications] = useState<JobApplicationTypes[]>([]);
   const [loading, setLoading] = useState(true);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [totalCount, setTotalCount] = useState(0);
+  const pathname = usePathname();
 
-  const fetchApplications = async () => {
+  const fetchApplications = async (limit: number, page: number) => {
+    setLoading(true);
     try {
-      const response = await fetch("/api/applications");
+      const response = await fetch(
+        `/api/applications?limit=${limit}&page=${page}`
+      );
       const data = await response.json();
       setApplications(data?.data || []);
+      setTotalCount(data?.totalCount || 0);
     } catch (error) {
       console.error("Failed to fetch applications", error);
     } finally {
@@ -32,16 +42,24 @@ export const ApplicationsProvider: React.FC<{ children: React.ReactNode }> = ({
 
   const refreshApplications = async () => {
     setLoading(true);
-    await fetchApplications();
+    const limit = pathname === "/dashboard" ? 5 : 10;
+    await fetchApplications(limit, currentPage);
   };
 
   useEffect(() => {
-    fetchApplications();
-  }, []);
+    const limit = pathname === "/dashboard" ? 5 : 10;
+    fetchApplications(limit, currentPage);
+  }, [pathname, currentPage]);
 
   return (
     <ApplicationsContext.Provider
-      value={{ applications, refreshApplications, loading }}
+      value={{
+        applications,
+        refreshApplications,
+        loading,
+        setCurrentPage,
+        totalCount,
+      }}
     >
       {children}
     </ApplicationsContext.Provider>
@@ -52,7 +70,7 @@ export const useApplications = () => {
   const context = useContext(ApplicationsContext);
   if (context === undefined) {
     throw new Error(
-      "useApplications måste användas inom en ApplicationsProvider"
+      "useApplications must be used within an ApplicationsProvider"
     );
   }
   return context;
