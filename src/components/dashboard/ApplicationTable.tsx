@@ -48,15 +48,11 @@ const ApplicationTable: React.FC<ApplicationTableProps> = ({
     setOpenDialog(false);
     setSelectedApplication(null);
   };
-
   const skeletonRows = Array.from({ length: 5 });
   return (
     <>
       <TableContainer component={Paper}>
-        <Table
-          sx={{ minWidth: 650 }}
-          aria-label="job applications table"
-        >
+        <Table sx={{ minWidth: 650 }} aria-label="job applications table">
           <TableHead>
             <TableRow>
               <TableCell>Job Title</TableCell>
@@ -96,30 +92,18 @@ const ApplicationTable: React.FC<ApplicationTableProps> = ({
                       <Skeleton variant="text" />
                     </TableCell>
                     <TableCell align="right">
-                      <Skeleton
-                        variant="circular"
-                        width={24}
-                        height={24}
-                      />
+                      <Skeleton variant="circular" width={24} height={24} />
                     </TableCell>
                     <TableCell align="right">
-                      <Skeleton
-                        variant="circular"
-                        width={24}
-                        height={24}
-                      />
+                      <Skeleton variant="circular" width={24} height={24} />
                     </TableCell>
                   </TableRow>
                 ))
-              : applications.map((row) => (
+              : applications?.map((row) => (
                   <TableRow
                     key={row.job_title}
-                    sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
-                  >
-                    <TableCell
-                      component="th"
-                      scope="row"
-                    >
+                    sx={{ "&:last-child td, &:last-child th": { border: 0 } }}>
+                    <TableCell component="th" scope="row">
                       {row.job_title}
                     </TableCell>
                     <TableCell>{row.job_location}</TableCell>
@@ -127,10 +111,7 @@ const ApplicationTable: React.FC<ApplicationTableProps> = ({
                     <TableCell>{row.contact_person}</TableCell>
                     <TableCell>
                       {row.application_url && (
-                        <Link
-                          href={row.application_url}
-                          color="inherit"
-                        >
+                        <Link href={row.application_url} color="inherit">
                           {row.application_url}
                         </Link>
                       )}
@@ -141,8 +122,7 @@ const ApplicationTable: React.FC<ApplicationTableProps> = ({
                       <IconButton
                         onClick={() => {
                           handleOpenDialog(row, "Edit Application", "edit");
-                        }}
-                      >
+                        }}>
                         <EditIcon />
                       </IconButton>
                     </TableCell>
@@ -154,8 +134,7 @@ const ApplicationTable: React.FC<ApplicationTableProps> = ({
                             "Archive Application",
                             "archive"
                           );
-                        }}
-                      >
+                        }}>
                         <ArchiveIcon />
                       </IconButton>
                     </TableCell>
