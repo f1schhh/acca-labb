@@ -1,6 +1,5 @@
 "use client";
 import { Box, Button, TextField } from "@mui/material";
-// import { UserTypes } from "../../types";
 import { useState } from "react";
 import { loginWithCredentials } from "@/app/lib/actions";
 import { signInSchema } from "@/app/lib/zod";
@@ -24,14 +23,10 @@ export default function SignInForm() {
         password: formData.get("password"),
       });
 
-      console.log("2. Validation result:", validatedFields);
-
       if (!validatedFields.success) {
         setError(validatedFields.error.errors[0].message);
         return;
       }
-
-      console.log("2. About to call loginWithCredentials");
 
       const response = await loginWithCredentials(formData);
 

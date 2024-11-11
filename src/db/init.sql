@@ -112,7 +112,31 @@ INSERT INTO jobApplications (
 (4, 'Uppsala', 'Frontendify', 'Johan Berg', 'https://example.com/apply/4', 4, 1, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 3);
 
 
--- För att testa all data
+-- Funktion för att ta bort all data när en användare raderas
+CREATE OR REPLACE FUNCTION delete_user_data()
+RETURNS TRIGGER AS $$
+BEGIN
+    -- Delete all job applications
+    DELETE FROM jobApplications WHERE user_id = OLD.id;
+
+    -- Delete saved jobs
+    DELETE FROM savedJobs WHERE user_id = OLD.id;
+
+    -- Delete sessions
+    DELETE FROM auth.sessions WHERE user_id = OLD.id;
+
+    RETURN OLD;
+END;
+$$ LANGUAGE plpgsql;
+
+CREATE TRIGGER before_delete_user
+    BEFORE DELETE ON auth.users
+    FOR EACH ROW
+    EXECUTE FUNCTION delete_user_data();
+
+
+
+-- För att testa all data, denna kan tas bort när man har testat allt
 SELECT
     u.id AS user_id,
     u.first_name || ' ' || u.last_name AS user_name,

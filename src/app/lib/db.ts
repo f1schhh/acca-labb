@@ -18,14 +18,14 @@ export const pool = new Pool({
   password: process.env.DB_PASSWORD,
   database: process.env.DB_NAME,
   port: Number(process.env.DB_PORT || "5432"),
-  // max: 20,
-  // idleTimeoutMillis: 30000,
-  // connectionTimeoutMillis: 2000,
+  max: 20,
+  idleTimeoutMillis: 30000,
+  connectionTimeoutMillis: 2000,
 });
 
 export const query = async (
   text: string,
-  params?: (string | number | boolean)[]
+  params?: (string | number | boolean | undefined)[]
 ) => {
   const client = await pool.connect();
 

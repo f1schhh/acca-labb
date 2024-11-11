@@ -68,7 +68,6 @@ export async function getUserByEmail(email: string) {
 
 export async function getUserById(id: string) {
   try {
-
     const result = await query(
       "SELECT id, first_name, last_name, email, password, address, phone, zipcode, city, country FROM auth.users WHERE id = $1",
 
@@ -150,7 +149,7 @@ export async function PUT(request: NextRequest) {
         userData.country,
       ];
     }
-    // If password is being updated, hash it
+
     if (userData.password) {
       const hashedPassword = await bcrypt.hash(userData.password, 10);
       query += `, password = $${params.length + 1}`;
@@ -183,17 +182,22 @@ export async function DELETE() {
     return Response.json({ error: "Unauthorized" }, { status: 401 });
   }
   try {
+    await query("BEGIN");
     const userId = session.user.id;
 
     const result = await query(
-      "DELETE FROM auth.users WHERE id = $1 RETURNING *",
+      "DELETE FROM auth.users WHERE id = $1 RETURNING id",
       [userId]
     );
+
+    await query("COMMIT");
+
     if (result.rowCount === 0) {
       return NextResponse.json({ error: "User not found" }, { status: 404 });
     }
     return NextResponse.json({ message: "User deleted successfully" });
   } catch (error) {
+    await query("ROLLBACK");
     console.error("Error deleting user:", error);
     return NextResponse.json(
       { error: "Internal server error" },

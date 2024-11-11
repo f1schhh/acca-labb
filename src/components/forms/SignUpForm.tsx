@@ -11,7 +11,6 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { signUpAction } from "@/app/lib/actions";
 import { signUpSchema } from "@/app/lib/zod";
-// import { formProps, UserTypes } from "../../types";
 
 export default function SignUpForm() {
   const router = useRouter();
@@ -38,8 +37,6 @@ export default function SignUpForm() {
         country: formData.get("country"),
         phoneNumber: formData.get("phoneNumber"),
       });
-
-      console.log("2. Validation result:", validatedFields);
 
       if (!validatedFields.success) {
         setError(validatedFields.error.errors[0].message);
