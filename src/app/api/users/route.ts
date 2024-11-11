@@ -6,6 +6,7 @@ import { query } from "../../lib/db";
 
 export async function GET() {
   const session = await auth();
+  console.log("session get", session);
   if (!session?.user) {
     return Response.json({ error: "Unauthorized" }, { status: 401 });
   }
@@ -166,6 +167,77 @@ export async function PUT(request: NextRequest) {
     if (result.rowCount === 0) {
       return NextResponse.json({ error: "User not found" }, { status: 404 });
     }
+    return NextResponse.json(result.rows[0]);
+  } catch (error) {
+    console.error("Error updating user:", error);
+    return NextResponse.json(
+      { error: "Internal server error" },
+      { status: 500 }
+    );
+  }
+}
+
+export async function PATCH(request: NextRequest) {
+  try {
+    const { userId, userData } = await request.json();
+    console.log("userData", userData, "userId", userId);
+
+    let updateQuery = `UPDATE auth.users SET `;
+    const params = [];
+
+    const updates = [];
+    if (userData.first_name) {
+      updates.push("first_name = $1");
+      params.push(userData.first_name);
+    }
+    if (userData.last_name) {
+      updates.push("last_name = $2");
+      params.push(userData.last_name);
+    }
+    if (userData.email) {
+      updates.push("email = $3");
+      params.push(userData.email);
+    }
+    if (userData.address) {
+      updates.push("address = $4");
+      params.push(userData.address);
+    }
+    if (userData.phone) {
+      updates.push("phone = $5");
+      params.push(userData.phone);
+    }
+    if (userData.zipcode) {
+      updates.push("zipcode = $6");
+      params.push(userData.zipcode);
+    }
+    if (userData.city) {
+      updates.push("city = $7");
+      params.push(userData.city);
+    }
+    if (userData.country) {
+      updates.push("country = $8");
+      params.push(userData.country);
+    }
+
+    if (updates.length === 0) {
+      return NextResponse.json(
+        { error: "No fields provided for update" },
+        { status: 400 }
+      );
+    }
+
+    updateQuery +=
+      updates.join(", ") + ` WHERE id = $${params.length + 1} RETURNING *`;
+    params.push(userId);
+
+    console.log("Params:" + typeof params, "UpdateQuey:" + updateQuery);
+
+    const result = await query(updateQuery, params);
+
+    if (result.rowCount === 0) {
+      return NextResponse.json({ error: "User not found" }, { status: 404 });
+    }
+
     return NextResponse.json(result.rows[0]);
   } catch (error) {
     console.error("Error updating user:", error);
