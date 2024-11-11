@@ -9,7 +9,7 @@ import Paper from "@mui/material/Paper";
 import { IconButton } from "@mui/material";
 import ArchiveIcon from "@mui/icons-material/Archive";
 import EditIcon from "@mui/icons-material/Edit";
-import Link from "next/link";
+import Link from "@mui/material/Link";
 import { JobApplicationTypes } from "../../../types";
 import { useState } from "react";
 import ApplicationDialog from "./ApplicationDialog";
@@ -47,7 +47,6 @@ const ApplicationTable: React.FC<ApplicationTableProps> = ({
     setOpenDialog(false);
     setSelectedApplication(null);
   };
-  console.log("ALLA APPLICATIONS: ", applications);
 
   return (
     <>
@@ -88,9 +87,10 @@ const ApplicationTable: React.FC<ApplicationTableProps> = ({
                   {row.application_url && (
                     <Link
                       href={row.application_url}
-                      color="inherit"
+                      target="_blank"
+                      rel="noreferrer"
                     >
-                      {row.application_url}
+                      {row.application_url || "N/A"}
                     </Link>
                   )}
                 </TableCell>

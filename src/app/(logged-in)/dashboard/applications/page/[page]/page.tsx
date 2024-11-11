@@ -16,6 +16,7 @@ export default function ApplicationsPage({
     useApplications();
   const router = useRouter();
 
+  // React use needs to be used here (nextjs 15 bug) - https://github.com/vercel/next.js/issues/71690
   const { page } = use(params);
 
   console.log("page", page);
