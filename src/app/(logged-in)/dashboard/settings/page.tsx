@@ -16,7 +16,13 @@ export default async function Settings() {
   const userData = await getUserById(userId as string);
 
   return (
-    <Container maxWidth="lg">
+    <Container
+      maxWidth="lg"
+      sx={{
+        py: 4,
+        px: { xs: 2, sm: 3, md: 4 },
+      }}
+    >
       {userData && <SettingsForm userData={userData} />}
       <Button type="button">Delete account</Button>
     </Container>
