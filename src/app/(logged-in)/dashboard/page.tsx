@@ -1,8 +1,8 @@
 "use client";
 import { useEffect, useState } from "react";
 import { Box, Typography } from "@mui/material";
-import ApplicationCard from "../../../components/dashboard/ApplicationCard";
 import ApplicationTable from "../../../components/dashboard/ApplicationTable";
+import SummaryCard from "../../../components/dashboard/SummaryCard";
 
 export default function Dashboard() {
   const [applications, setApplications] = useState([]);
@@ -33,6 +33,10 @@ export default function Dashboard() {
     getUserApplications();
   }, []);
 
+  const numOfApplications = applications ? applications.length : 0;
+
+  const numOfOngoingApplications = applications ? applications.length : 0;
+
   return (
     <Box
       sx={{
@@ -53,8 +57,11 @@ export default function Dashboard() {
           marginTop: 2,
         }}
       >
-        <ApplicationCard />
-        <ApplicationCard />
+        <SummaryCard title="Total applications" stat={numOfApplications} />
+        <SummaryCard
+          title="Ongoing applications"
+          stat={numOfOngoingApplications}
+        />
       </Box>
       {applications && applications.length > 0 && (
         <>

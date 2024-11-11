@@ -1,12 +1,12 @@
 // import type { NextAuthConfig } from "next-auth";
-import NextAuth from 'next-auth'
-import Credentials from 'next-auth/providers/credentials'
+import NextAuth from "next-auth";
+import Credentials from "next-auth/providers/credentials";
 // import bcrypt from "bcrypt";
-import { getUserByEmail } from '@/app/api/users/route'
+import { getUserByEmail } from "@/app/api/users/route";
 
 export const { handlers, signIn, signOut, auth } = NextAuth({
-  debug: true,
-  session: { strategy: 'jwt' },
+  debug: process.env.NODE_ENV === "development",
+  session: { strategy: "jwt" },
   secret: process.env.NEXTAUTH_SECRET,
   providers: [
     Credentials({
@@ -15,13 +15,13 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
         password: {},
       },
       async authorize(credentials) {
-        const user = await getUserByEmail(credentials.email as string)
-        console.log('Found user:', !!user)
-        console.log('User:', user)
+        const user = await getUserByEmail(credentials.email as string);
+        console.log("Found user:", !!user);
+        console.log("User:", user);
 
         if (!user) {
-          console.log('No user found with email:', credentials.email)
-          throw new Error('No user found with email')
+          console.log("No user found with email:", credentials.email);
+          throw new Error("No user found with email");
         }
 
         // else {
@@ -35,28 +35,27 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
         //   }
         // }
 
-        console.log('Auth successful, returning user')
         return {
           id: user.id.toString(),
           email: user.email as string,
           name: `${user.first_name} ${user.last_name}` as string,
-        }
+        };
       },
     }),
   ],
   callbacks: {
     jwt({ token, user }) {
       if (user) {
-        token.id = user.id
+        token.id = user.id;
       }
-      return token
+      return token;
     },
     session({ session, token }) {
-      session.user.id = token.id as string
-      return session
+      session.user.id = token.id as string;
+      return session;
     },
   },
   pages: {
-    signIn: '/',
+    signIn: "/",
   },
-})
+});
