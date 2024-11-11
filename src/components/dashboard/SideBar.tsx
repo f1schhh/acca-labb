@@ -47,11 +47,14 @@ export default function SideBar() {
           </ListItemIcon>
           <ListItemText primary="Dashboard" />
         </ListItemButton>
-        <ListItemButton>
+        <ListItemButton
+          href="/dashboard/applications/page/1"
+          selected={pathname?.startsWith("/dashboard/applications")}
+        >
           <ListItemIcon>
             <DraftsIcon />
           </ListItemIcon>
-          <ListItemText primary="Ongoing applications" />
+          <ListItemText primary="My applications" />
         </ListItemButton>
         <ListItemButton
           href="/dashboard/archived"
