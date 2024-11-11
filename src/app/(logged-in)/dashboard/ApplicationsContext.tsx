@@ -24,7 +24,11 @@ export const ApplicationsProvider: React.FC<{ children: React.ReactNode }> = ({
   const [totalCount, setTotalCount] = useState(0);
   const pathname = usePathname();
 
-  const fetchApplications = async (limit: number, page: number) => {
+  const fetchApplications = async (
+    limit: number,
+    page: number,
+    loadLazy?: boolean
+  ) => {
     setLoading(true);
     try {
       const response = await fetch(
@@ -36,7 +40,13 @@ export const ApplicationsProvider: React.FC<{ children: React.ReactNode }> = ({
     } catch (error) {
       console.error("Failed to fetch applications", error);
     } finally {
-      setLoading(false);
+      if (loadLazy) {
+        setTimeout(() => {
+          setLoading(false);
+        }, 400);
+      } else {
+        setLoading(false);
+      }
     }
   };
 
@@ -48,7 +58,8 @@ export const ApplicationsProvider: React.FC<{ children: React.ReactNode }> = ({
 
   useEffect(() => {
     const limit = pathname === "/dashboard" ? 5 : 10;
-    fetchApplications(limit, currentPage);
+    const lazyStatus = pathname === "/dashboard" ? false : true;
+    fetchApplications(limit, currentPage, lazyStatus);
   }, [pathname, currentPage]);
 
   return (
