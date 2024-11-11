@@ -3,6 +3,7 @@ import NavBar from "../../../components/dashboard/NavBar";
 import SideBar from "../../../components/dashboard/SideBar";
 import { auth } from "../../../../auth";
 import { redirect } from "next/navigation";
+import { ApplicationsProvider } from "./ApplicationsContext";
 
 export default async function DashboardLayout({
   children,
@@ -18,52 +19,54 @@ export default async function DashboardLayout({
   const name = session?.user?.name;
 
   return (
-    <Container
-      disableGutters
-      sx={{
-        width: "100%",
-      }}
-      maxWidth="xl"
-    >
-      <NavBar username={name ?? ""} />
+    <ApplicationsProvider>
       <Container
         disableGutters
         sx={{
           width: "100%",
-          display: "flex",
-          flexDirection: {
-            xs: "column",
-            sm: "column",
-            md: "row",
-            lg: "row",
-            xl: "row",
-          },
-          marginTop: 3,
-          gap: 3,
         }}
         maxWidth="xl"
       >
-        <Box sx={{ width: { xs: "100%", sm: "100%", md: "20%" } }}>
-          <SideBar />
-        </Box>
-        <Divider
-          orientation="vertical"
-          variant="inset"
-          flexItem
+        <NavBar username={name ?? ""} />
+        <Container
+          disableGutters
           sx={{
-            marginLeft: 0,
-            marginRight: 0,
-            display: {
-              xs: "none",
-              sm: "none",
-              md: "block",
-              lg: "block",
-              xl: "block",
+            width: "100%",
+            display: "flex",
+            flexDirection: {
+              xs: "column",
+              sm: "column",
+              md: "row",
+              lg: "row",
+              xl: "row",
             },
+            marginTop: 3,
+            gap: 3,
           }}
-        />
-        {children}
+          maxWidth="xl"
+        >
+          <Box sx={{ width: { xs: "100%", sm: "100%", md: "20%" } }}>
+            <SideBar />
+          </Box>
+          <Divider
+            orientation="vertical"
+            variant="inset"
+            flexItem
+            sx={{
+              marginLeft: 0,
+              marginRight: 0,
+              display: {
+                xs: "none",
+                sm: "none",
+                md: "block",
+                lg: "block",
+                xl: "block",
+              },
+            }}
+          />
+          {children}
+        </Container>
       </Container>
-    </Container>
+    </ApplicationsProvider>
   );
 }

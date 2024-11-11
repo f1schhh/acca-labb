@@ -11,9 +11,11 @@ import HomeIcon from "@mui/icons-material/Home";
 import { usePathname } from "next/navigation";
 import ApplicationDialog from "./ApplicationDialog";
 import { useState } from "react";
+import { useApplications } from "../../app/(logged-in)/dashboard/ApplicationsContext";
 
 export default function SideBar() {
   const pathname = usePathname();
+  const { refreshApplications } = useApplications();
   const [openDialog, setOpenDialog] = useState(false);
   const handleOpenDialog = () => {
     setOpenDialog(true);
@@ -71,7 +73,10 @@ export default function SideBar() {
         applicationType="create"
         open={openDialog}
         onClose={handleCloseDialog}
-        onAction={handleCloseDialog}
+        onAction={() => {
+          handleCloseDialog();
+          refreshApplications();
+        }}
         title="Create Application"
       />
     </>
