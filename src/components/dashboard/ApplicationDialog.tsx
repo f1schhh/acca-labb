@@ -44,8 +44,17 @@ const ApplicationDialog: React.FC<ApplicationDialogProps> = ({
       const formObject = Object.fromEntries(formData.entries());
 
       if (applicationType === "archive") {
-        console.log("ARCHIVE");
-        setAlertMsg("Application Archived");
+        const response = await fetch("/api/applications", {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(application?.id),
+        });
+
+        const msg = await response.json();
+
+        setAlertMsg(msg.data);
       }
       if (applicationType === "edit") {
         console.log(formData);
@@ -73,8 +82,7 @@ const ApplicationDialog: React.FC<ApplicationDialogProps> = ({
         setShowAlert(false);
         setAlertMsg("");
       }, 3100);
-      console.log("onAction är på väg att köras"); // Kontroll innan onAction körs
-      onAction(); // Detta borde nu köra `getUserApplications` i Dashboard
+      onAction();
     } catch (error) {
       setError(true);
       setShowAlert(true);

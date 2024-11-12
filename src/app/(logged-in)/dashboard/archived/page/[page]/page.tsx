@@ -19,8 +19,6 @@ export default function ArchivedPage({
   // React use needs to be used here (nextjs 15 bug) - https://github.com/vercel/next.js/issues/71690
   const { page } = use(params);
 
-  console.log("page", page);
-
   useEffect(() => {
     setCurrentPage(parseInt(page));
   }, [page, setCurrentPage]);
@@ -29,7 +27,7 @@ export default function ArchivedPage({
     event: React.ChangeEvent<unknown>,
     value: number
   ) => {
-    router.push(`/dashboard/applications/page/${value}`);
+    router.push(`/dashboard/archived/page/${value}`);
   };
 
   const itemsPerPage = 10;
@@ -43,7 +41,8 @@ export default function ArchivedPage({
         flexDirection: "column",
         gap: 2,
         padding: 2,
-      }}>
+      }}
+    >
       <Typography variant="h5">Archived Applications</Typography>
 
       {loading ? (

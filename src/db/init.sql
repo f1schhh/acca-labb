@@ -136,6 +136,44 @@ CREATE TRIGGER before_delete_user
 
 
 
+
+-- INDEXES
+-- Index för att snabba upp filtrering på användarens ansökningar
+CREATE INDEX idx_job_applications_user_id ON jobApplications(user_id);
+
+-- Index för att snabba upp sortering av ansökningar efter skapandedatum
+CREATE INDEX idx_job_applications_created_date ON jobApplications(created_date DESC);
+
+-- Index för att snabba upp joins med job_type_id och job_status_id
+CREATE INDEX idx_job_applications_job_type_id ON jobApplications(job_type_id);
+CREATE INDEX idx_job_applications_job_status_id ON jobApplications(job_status_id);
+
+-- Index för att snabba upp sökning på job_title och user_id
+CREATE INDEX idx_saved_jobs_job_title_user_id ON savedJobs(job_title, user_id);
+
+-- Index för att snabba upp joins på jobTypes och jobStatus via id
+CREATE INDEX idx_job_types_id ON jobTypes(id);
+CREATE INDEX idx_job_status_id ON jobStatus(id);
+
+-- Analyze all indexes
+
+-- Example for testing applications indexes
+EXPLAIN ANALYZE
+SELECT ja.*,
+       sj.job_title,
+       jt.job_type,
+       jt.id AS job_type_id,
+       js.job_status,
+       js.id AS job_status_id
+FROM jobApplications ja
+JOIN savedJobs sj ON ja.job_title = sj.id
+LEFT JOIN jobTypes jt ON ja.job_type_id = jt.id
+LEFT JOIN jobStatus js ON ja.job_status_id = js.id
+WHERE ja.user_id = 1
+ORDER BY ja.created_date DESC
+LIMIT 5 OFFSET 0;
+
+
 -- För att testa all data, denna kan tas bort när man har testat allt
 SELECT
     u.id AS user_id,

@@ -62,7 +62,6 @@ export async function POST(request: NextRequest) {
 
   try {
     const applicationData = await request.json();
-    console.log(`VAD ÄR FEL`, applicationData);
 
     let jobTitleId;
     const checkJobTitleResult = await query(
@@ -97,6 +96,45 @@ export async function POST(request: NextRequest) {
     );
 
     return NextResponse.json({ success: true, data: result.rows[0] });
+  } catch (error) {
+    console.error("Database connection error or query error:", error);
+    return NextResponse.json({ error: "Server error" }, { status: 500 });
+  }
+}
+export async function PUT(request: NextRequest) {
+  const session = await auth();
+  const userId = session?.user?.id;
+
+  if (!userId) {
+    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  }
+
+  try {
+    const applicationId = await request.json();
+
+    if (!applicationId) {
+      return NextResponse.json(
+        { error: "Application ID is required" },
+        { status: 400 }
+      );
+    }
+
+    const result = await query(
+      `UPDATE jobApplications SET job_status_id = 2 WHERE id = $1 AND user_id = $2 RETURNING *`,
+      [applicationId, userId]
+    );
+
+    if (result.rowCount === 0) {
+      return NextResponse.json(
+        { error: "Application not found" },
+        { status: 404 }
+      );
+    }
+
+    return NextResponse.json({
+      success: true,
+      data: "Application is now archived",
+    });
   } catch (error) {
     console.error("Database connection error or query error:", error);
     return NextResponse.json({ error: "Server error" }, { status: 500 });
