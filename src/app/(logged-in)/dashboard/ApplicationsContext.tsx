@@ -9,6 +9,7 @@ interface ApplicationsContextProps {
   loading: boolean;
   setCurrentPage: (page: number) => void;
   totalCount: number;
+  currentPath: string;
 }
 
 const ApplicationsContext = createContext<ApplicationsContextProps | undefined>(
@@ -21,6 +22,7 @@ export const ApplicationsProvider: React.FC<{ children: React.ReactNode }> = ({
   const [applications, setApplications] = useState<JobApplicationTypes[]>([]);
   const [loading, setLoading] = useState(true);
   const [currentPage, setCurrentPage] = useState(1);
+  const [currentPath, setCurrentPath] = useState("");
   const [totalCount, setTotalCount] = useState(0);
   const pathname = usePathname();
 
@@ -38,6 +40,7 @@ export const ApplicationsProvider: React.FC<{ children: React.ReactNode }> = ({
       const data = await response.json();
       setApplications(data?.data || []);
       setTotalCount(data?.totalCount || 0);
+      setCurrentPath(pathname || "");
     } catch (error) {
       console.error("Failed to fetch applications", error);
     } finally {
@@ -74,7 +77,9 @@ export const ApplicationsProvider: React.FC<{ children: React.ReactNode }> = ({
         loading,
         setCurrentPage,
         totalCount,
-      }}>
+        currentPath,
+      }}
+    >
       {children}
     </ApplicationsContext.Provider>
   );

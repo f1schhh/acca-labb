@@ -23,7 +23,7 @@ interface ApplicationTableProps {
 const ApplicationTable: React.FC<ApplicationTableProps> = ({
   applications,
 }) => {
-  const { refreshApplications } = useApplications();
+  const { refreshApplications, currentPath } = useApplications();
   const [openDialog, setOpenDialog] = useState(false);
   const [selectedApplication, setSelectedApplication] =
     useState<JobApplicationTypes | null>(null);
@@ -65,7 +65,9 @@ const ApplicationTable: React.FC<ApplicationTableProps> = ({
               <TableCell>Type</TableCell>
               <TableCell>Status</TableCell>
               <TableCell align="right">Edit</TableCell>
-              <TableCell align="right">Archive</TableCell>
+              {!currentPath?.startsWith("/dashboard/archived") && (
+                <TableCell align="right">Archive</TableCell>
+              )}
             </TableRow>
           </TableHead>
           <TableBody>
@@ -105,15 +107,17 @@ const ApplicationTable: React.FC<ApplicationTableProps> = ({
                     <EditIcon />
                   </IconButton>
                 </TableCell>
-                <TableCell align="right">
-                  <IconButton
-                    onClick={() => {
-                      handleOpenDialog(row, "Archive Application", "archive");
-                    }}
-                  >
-                    <ArchiveIcon />
-                  </IconButton>
-                </TableCell>
+                {!currentPath?.startsWith("/dashboard/archived") && (
+                  <TableCell align="right">
+                    <IconButton
+                      onClick={() => {
+                        handleOpenDialog(row, "Archive Application", "archive");
+                      }}
+                    >
+                      <ArchiveIcon />
+                    </IconButton>
+                  </TableCell>
+                )}
               </TableRow>
             ))}
           </TableBody>

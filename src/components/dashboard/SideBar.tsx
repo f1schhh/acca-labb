@@ -30,11 +30,18 @@ export default function SideBar() {
         component="nav"
         aria-labelledby="nested-list-subheader"
         subheader={
-          <ListSubheader component="div" id="nested-list-subheader">
+          <ListSubheader
+            component="div"
+            id="nested-list-subheader"
+          >
             Dashboard
           </ListSubheader>
-        }>
-        <ListItemButton href="/dashboard" selected={pathname === "/dashboard"}>
+        }
+      >
+        <ListItemButton
+          href="/dashboard"
+          selected={pathname === "/dashboard"}
+        >
           <ListItemIcon>
             <HomeIcon />
           </ListItemIcon>
@@ -42,15 +49,17 @@ export default function SideBar() {
         </ListItemButton>
         <ListItemButton
           href="/dashboard/applications/page/1"
-          selected={pathname?.startsWith("/dashboard/applications")}>
+          selected={pathname?.startsWith("/dashboard/applications")}
+        >
           <ListItemIcon>
             <DraftsIcon />
           </ListItemIcon>
-          <ListItemText primary="My applications" />
+          <ListItemText primary="Applications" />
         </ListItemButton>
         <ListItemButton
           href="/dashboard/archived/page/1"
-          selected={pathname?.startsWith("/dashboard/archived")}>
+          selected={pathname?.startsWith("/dashboard/archived")}
+        >
           <ListItemIcon>
             <ArchiveIcon />
           </ListItemIcon>
