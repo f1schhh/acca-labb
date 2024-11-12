@@ -42,5 +42,8 @@ next-env.d.ts
 # docker
 compose.yml
 Dockerfile
-nginx.conf
+docker/nginx.conf
 .dockerignore
+docker/default.config
+docker/1-nginx.config
+docker/2-nginx.config
