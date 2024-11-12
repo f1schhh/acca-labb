@@ -92,7 +92,7 @@ INSERT INTO jobTypes (job_type) VALUES
 
 INSERT INTO jobStatus (job_status) VALUES
 ('Open'),
-('Closed'),
+('Archived'),
 ('In Progress'),
 ('Offered');
 

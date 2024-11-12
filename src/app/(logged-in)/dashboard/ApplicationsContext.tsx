@@ -27,12 +27,13 @@ export const ApplicationsProvider: React.FC<{ children: React.ReactNode }> = ({
   const fetchApplications = async (
     limit: number,
     page: number,
-    loadLazy?: boolean
+    loadLazy?: boolean,
+    archived?: boolean
   ) => {
     setLoading(true);
     try {
       const response = await fetch(
-        `/api/applications?limit=${limit}&page=${page}`
+        `/api/applications?archived=${archived}&limit=${limit}&page=${page}`
       );
       const data = await response.json();
       setApplications(data?.data || []);
@@ -53,13 +54,16 @@ export const ApplicationsProvider: React.FC<{ children: React.ReactNode }> = ({
   const refreshApplications = async () => {
     setLoading(true);
     const limit = pathname === "/dashboard" ? 5 : 10;
-    await fetchApplications(limit, currentPage);
+    const lazyStatus = pathname === "/dashboard" ? false : true;
+    const isArchived = pathname?.startsWith("/dashboard/archived");
+    await fetchApplications(limit, currentPage, lazyStatus, isArchived);
   };
 
   useEffect(() => {
     const limit = pathname === "/dashboard" ? 5 : 10;
     const lazyStatus = pathname === "/dashboard" ? false : true;
-    fetchApplications(limit, currentPage, lazyStatus);
+    const isArchived = pathname?.startsWith("/dashboard/archived");
+    fetchApplications(limit, currentPage, lazyStatus, isArchived);
   }, [pathname, currentPage]);
 
   return (
@@ -70,8 +74,7 @@ export const ApplicationsProvider: React.FC<{ children: React.ReactNode }> = ({
         loading,
         setCurrentPage,
         totalCount,
-      }}
-    >
+      }}>
       {children}
     </ApplicationsContext.Provider>
   );
