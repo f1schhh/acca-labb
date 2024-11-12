@@ -257,33 +257,3 @@ export async function PATCH(request: NextRequest) {
     );
   }
 }
-
-export async function DELETE() {
-  const session = await auth();
-  if (!session?.user) {
-    return Response.json({ error: "Unauthorized" }, { status: 401 });
-  }
-  try {
-    await query("BEGIN");
-    const userId = session.user.id;
-
-    const result = await query(
-      "DELETE FROM auth.users WHERE id = $1 RETURNING id",
-      [userId]
-    );
-
-    await query("COMMIT");
-
-    if (result.rowCount === 0) {
-      return NextResponse.json({ error: "User not found" }, { status: 404 });
-    }
-    return NextResponse.json({ message: "User deleted successfully" });
-  } catch (error) {
-    await query("ROLLBACK");
-    console.error("Error deleting user:", error);
-    return NextResponse.json(
-      { error: "Internal server error" },
-      { status: 500 }
-    );
-  }
-}
