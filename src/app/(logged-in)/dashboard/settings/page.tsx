@@ -2,7 +2,7 @@ import { Button, Container } from "@mui/material";
 import SettingsForm from "../../../../components/forms/SettingsForm";
 import { auth } from "../../../../../auth";
 import { redirect } from "next/navigation";
-import { getUserById } from "@/app/api/users/route";
+import { getUserById } from "../../../lib/helpers";
 
 export default async function Settings() {
   const session = await auth();

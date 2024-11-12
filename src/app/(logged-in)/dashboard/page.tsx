@@ -44,7 +44,7 @@ export default function Dashboard() {
         />
         <SummaryCard
           title="Latest applications"
-          jobbTitle={job_title}
+          jobbTitle={job_title?.toString()}
           companyTitle={company_name}
         />
       </Box>
