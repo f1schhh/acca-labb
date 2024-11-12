@@ -19,6 +19,7 @@
     "@types/pg": "^8.10.9",
     "bcryptjs": "^2.4.3",
     "dotenv": "^16.4.5",
+    "json2csv": "^6.0.0-alpha.2",
     "next": "15.0.2",
     "next-auth": "^5.0.0-beta.25",
     "pg": "^8.13.1",
@@ -29,6 +30,7 @@
   },
   "devDependencies": {
     "@types/bcryptjs": "^2.4.6",
+    "@types/json2csv": "^5.0.7",
     "@types/node": "^20",
     "@types/react": "^18",
     "@types/react-dom": "^18",

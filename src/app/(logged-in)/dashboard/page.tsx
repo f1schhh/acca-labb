@@ -4,6 +4,7 @@ import SummaryCard from "../../../components/dashboard/SummaryCard";
 import ApplicationTable from "../../../components/dashboard/ApplicationTable";
 import { useApplications } from "./ApplicationsContext";
 import LoadingTable from "@/components/dashboard/LoadingTable";
+import ExportDataButton from "@/components/dashboard/ExportDataButton";
 
 export default function Dashboard() {
   const { applications, loading } = useApplications();
@@ -27,6 +28,7 @@ export default function Dashboard() {
       }}
     >
       <Typography variant="h5">Summary</Typography>
+      <ExportDataButton email={"hej@live.se"} />
 
       <Box
         sx={{
@@ -36,7 +38,10 @@ export default function Dashboard() {
           marginTop: 2,
         }}
       >
-        <SummaryCard title="Total applications" stat={numOfApplications} />
+        <SummaryCard
+          title="Total applications"
+          stat={numOfApplications}
+        />
         <SummaryCard
           title="Latest applications"
           jobbTitle={job_title}
