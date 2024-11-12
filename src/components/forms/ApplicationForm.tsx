@@ -1,5 +1,6 @@
 import {
   Box,
+  CircularProgress,
   FormControl,
   InputLabel,
   MenuItem,
@@ -67,7 +68,7 @@ const ApplicationForm: React.FC<ApplicationFormProps> = ({
         height: "100%",
       }}
     >
-      {!loading && (
+      {!loading ? (
         <>
           <AutocompleteInput
             options={jobSavedArr || []}
@@ -155,7 +156,7 @@ const ApplicationForm: React.FC<ApplicationFormProps> = ({
             </FormControl>
 
             <FormControl fullWidth>
-              <InputLabel id="demo-simple-select-label">Job type</InputLabel>
+              <InputLabel id="job-type-label">Job type</InputLabel>
               <SelectInput
                 label="Job type"
                 name="jobType"
@@ -174,6 +175,16 @@ const ApplicationForm: React.FC<ApplicationFormProps> = ({
             </FormControl>
           </Box>
         </>
+      ) : (
+        <Box
+          sx={{
+            display: "flex",
+            justifyContent: "center",
+            mt: 2,
+          }}
+        >
+          <CircularProgress />
+        </Box>
       )}
     </Box>
   );
