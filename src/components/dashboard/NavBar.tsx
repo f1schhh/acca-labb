@@ -12,6 +12,7 @@ import MenuItem from "@mui/material/MenuItem";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { signOutAction } from "@/app/lib/actions";
+import Image from "next/image";
 
 const settings: { label: string; action: string }[] = [
   { label: "Settings", action: "/dashboard/settings" },
@@ -44,7 +45,8 @@ function ResponsiveAppBar({ username }: { username: string | null }) {
       <Container maxWidth="xl">
         <Toolbar disableGutters sx={{ justifyContent: "space-between" }}>
           <Box sx={{ display: "flex", alignItems: "center", gap: 2 }}>
-            <Typography
+            <Image src="/Logo.png" alt="logo" width={160} height={100} />
+            {/* <Typography
               variant="h6"
               noWrap
               component="a"
@@ -60,7 +62,7 @@ function ResponsiveAppBar({ username }: { username: string | null }) {
               }}
             >
               ACCAB
-            </Typography>
+            </Typography> */}
             {username && (
               <Typography
                 variant="body1"
