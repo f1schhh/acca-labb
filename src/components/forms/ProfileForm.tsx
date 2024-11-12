@@ -83,7 +83,7 @@ export default function ProfileForm({ userData }: { userData: UserTypes }) {
               type="text"
               name="lastName"
               required
-              defaultValue={userData.last_name}
+              defaultValue={updatedValues.last_name}
             />
             <TextField
               id="email-input"
@@ -91,7 +91,7 @@ export default function ProfileForm({ userData }: { userData: UserTypes }) {
               type="email"
               name="email"
               required
-              defaultValue={userData.email}
+              defaultValue={updatedValues.email}
             />
 
             <TextField
@@ -100,7 +100,7 @@ export default function ProfileForm({ userData }: { userData: UserTypes }) {
               type="text"
               name="address"
               required
-              defaultValue={userData.address}
+              defaultValue={updatedValues.address}
             />
             <Box
               sx={{
@@ -117,7 +117,7 @@ export default function ProfileForm({ userData }: { userData: UserTypes }) {
                 name="zipcode"
                 required
                 fullWidth
-                defaultValue={userData.zipcode}
+                defaultValue={updatedValues.zipcode}
               />
 
               <TextField
@@ -127,7 +127,7 @@ export default function ProfileForm({ userData }: { userData: UserTypes }) {
                 name="city"
                 required
                 fullWidth
-                defaultValue={userData.city}
+                defaultValue={updatedValues.city}
               />
             </Box>
             <Box
@@ -145,7 +145,7 @@ export default function ProfileForm({ userData }: { userData: UserTypes }) {
                 name="country"
                 required
                 fullWidth
-                defaultValue={userData.country}
+                defaultValue={updatedValues.country}
               />
 
               <TextField
@@ -155,7 +155,7 @@ export default function ProfileForm({ userData }: { userData: UserTypes }) {
                 name="phoneNumber"
                 required
                 fullWidth
-                defaultValue={userData.phone}
+                defaultValue={updatedValues.phone}
               />
             </Box>
             <Box
