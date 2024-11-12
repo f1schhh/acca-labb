@@ -2,7 +2,7 @@
 import NextAuth from "next-auth";
 import Credentials from "next-auth/providers/credentials";
 import bcrypt from "bcryptjs";
-import { getUserByEmail } from "@/app/api/users/route";
+import { getUserByEmail } from "./src/app/lib/helpers";
 
 export const { handlers, signIn, signOut, auth } = NextAuth({
   debug: process.env.NODE_ENV === "development",
@@ -14,10 +14,8 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
         email: {},
         password: {},
       },
-      async authorize(credentials) {
+      authorize: async (credentials) => {
         const user = await getUserByEmail(credentials.email as string);
-        console.log("Found user:", !!user);
-        console.log("User:", user);
 
         if (!user) {
           console.log("No user found with email:", credentials.email);
@@ -34,6 +32,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
         }
 
         return {
+          ...user,
           id: user.id.toString(),
           email: user.email as string,
           name: `${user.first_name} ${user.last_name}` as string,

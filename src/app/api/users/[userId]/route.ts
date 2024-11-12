@@ -1,6 +1,6 @@
 import { query } from "../../../lib/db";
 import { NextRequest, NextResponse } from "next/server";
-import { getUserById } from "../route";
+import { getUserById } from "../../../lib/helpers";
 
 type Params = Promise<{ userId: string }>;
 export async function DELETE(
