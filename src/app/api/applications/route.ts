@@ -11,6 +11,7 @@ export async function GET(request: Request) {
   }
 
   const { searchParams } = new URL(request.url);
+  const archived = searchParams.get("archived") === "true";
   const page = parseInt(searchParams.get("page") || "1", 10);
   const limit = parseInt(searchParams.get("limit") || "5", 10);
   const offset = (page - 1) * limit;
@@ -28,14 +29,17 @@ export async function GET(request: Request) {
        LEFT JOIN jobTypes jt ON ja.job_type_id = jt.id
        LEFT JOIN jobStatus js ON ja.job_status_id = js.id
        WHERE ja.user_id = $1
+       ${archived ? "AND ja.job_status_id = 2" : ""}
        ORDER BY ja.created_date DESC
        LIMIT $2 OFFSET $3`,
       [userId, limit, offset]
     );
+
     const countResult = await query(
       `SELECT COUNT(*) as total_count
        FROM jobApplications
-       WHERE user_id = $1`,
+       WHERE user_id = $1
+       ${archived ? "AND job_status_id = 2" : ""}`,
       [userId]
     );
 
