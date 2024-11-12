@@ -29,7 +29,7 @@ export async function GET(request: Request) {
        LEFT JOIN jobTypes jt ON ja.job_type_id = jt.id
        LEFT JOIN jobStatus js ON ja.job_status_id = js.id
        WHERE ja.user_id = $1
-       ${archived ? "AND ja.job_status_id = 2" : ""}
+       ${archived ? "AND ja.job_status_id = 2" : "AND ja.job_status_id != 2"}
        ORDER BY ja.created_date DESC
        LIMIT $2 OFFSET $3`,
       [userId, limit, offset]
@@ -39,7 +39,7 @@ export async function GET(request: Request) {
       `SELECT COUNT(*) as total_count
        FROM jobApplications
        WHERE user_id = $1
-       ${archived ? "AND job_status_id = 2" : ""}`,
+       ${archived ? "AND job_status_id = 2" : "AND job_status_id != 2"}`,
       [userId]
     );
 

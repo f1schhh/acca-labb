@@ -10,8 +10,8 @@ import { useTheme } from "@mui/material/styles";
 import useMediaQuery from "@mui/material/useMediaQuery";
 import ApplicationForm from "../forms/ApplicationForm";
 import { JobApplicationTypes } from "../../../types";
-import { useState } from "react";
 import SlidingAlert from "./SlideInAlert";
+import { useAlert } from "@/app/(logged-in)/dashboard/AlertContext";
 
 interface ApplicationDialogProps {
   open: boolean;
@@ -32,14 +32,14 @@ const ApplicationDialog: React.FC<ApplicationDialogProps> = ({
 }) => {
   const theme = useTheme();
   const fullScreen = useMediaQuery(theme.breakpoints.down("sm"));
-  const [showAlert, setShowAlert] = useState(false);
-  const [error, setError] = useState(false);
-  const [alertMsg, setAlertMsg] = useState("");
+  const { showAlert, alertMsg, error, setShowAlert, setAlertMsg, setError } =
+    useAlert();
 
   const handleOnSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
 
     try {
+      setError(false);
       const formData = new FormData(event.currentTarget);
       const formObject = Object.fromEntries(formData.entries());
 
@@ -52,13 +52,27 @@ const ApplicationDialog: React.FC<ApplicationDialogProps> = ({
           body: JSON.stringify(application?.id),
         });
 
+        if (!response.ok) {
+          throw new Error("Something went wrong");
+        }
         const msg = await response.json();
-
         setAlertMsg(msg.data);
       }
       if (applicationType === "edit") {
-        console.log(formData);
-        console.log("EDIT");
+        const response = await fetch("/api/applications/edit", {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            id: application?.id,
+            ...formObject,
+          }),
+        });
+
+        if (!response.ok) {
+          throw new Error("Something went wrong");
+        }
         setAlertMsg("Application Saved");
       }
       if (applicationType === "create") {
@@ -70,9 +84,9 @@ const ApplicationDialog: React.FC<ApplicationDialogProps> = ({
           body: JSON.stringify(formObject),
         });
 
-        const data = await response.json();
-        console.log(data);
-        console.log("CREATE");
+        if (!response.ok) {
+          throw new Error("Something went wrong");
+        }
         setAlertMsg("Application Created");
       }
 
