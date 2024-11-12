@@ -1,7 +1,7 @@
 // import type { NextAuthConfig } from "next-auth";
 import NextAuth from "next-auth";
 import Credentials from "next-auth/providers/credentials";
-// import bcrypt from "bcrypt";
+import bcrypt from "bcryptjs";
 import { getUserByEmail } from "@/app/api/users/route";
 
 export const { handlers, signIn, signOut, auth } = NextAuth({
@@ -24,16 +24,14 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
           throw new Error("No user found with email");
         }
 
-        // else {
-        //   const passwordMatch = await bcrypt.compare(
-        //     credentials.password as string,
-        //     user.password as string
-        //   );
-        //   if (!passwordMatch) {
-        //     console.log("Password doesn't match");
-        //     throw new Error("Password doesn't match");
-        //   }
-        // }
+        const passwordMatch = await bcrypt.compare(
+          credentials.password as string,
+          user.password as string
+        );
+        if (!passwordMatch) {
+          console.log("Password doesn't match");
+          throw new Error("Password doesn't match");
+        }
 
         return {
           id: user.id.toString(),

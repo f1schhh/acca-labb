@@ -26,7 +26,7 @@ export async function GET() {
       {
         success: false,
         error: error instanceof Error ? error.message : "Unknown error",
-        // details: process.env.NODE_ENV === "development" ? error : undefined,
+        details: process.env.NODE_ENV === "development" ? error : undefined,
       },
       { status: 500 }
     );

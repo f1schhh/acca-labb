@@ -72,8 +72,6 @@ export async function signUpAction(formData: FormData) {
       return { error: error.message || "Failed to create account" };
     }
 
-    console.log("trying to sign in", response);
-    // After successful signup, sign in the user
     const signInResult = await signIn("credentials", {
       email: dbData.email,
       password: dbData.password,
