@@ -67,6 +67,7 @@ export const ApplicationsProvider: React.FC<{ children: React.ReactNode }> = ({
     const lazyStatus = pathname === "/dashboard" ? false : true;
     const isArchived = pathname?.startsWith("/dashboard/archived");
     fetchApplications(limit, currentPage, lazyStatus, isArchived);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [pathname, currentPage]);
 
   return (
