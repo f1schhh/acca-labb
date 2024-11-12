@@ -4,6 +4,7 @@ import { UserTypes } from "../../../types/userTypes";
 import ProfileForm from "./ProfileForm";
 import PasswordForm from "./PasswordForm";
 import { useState } from "react";
+import DeleteButton from "../settings/DeleteButton";
 
 export default function SettingsForm({ userData }: { userData: UserTypes }) {
   const [showPasswordForm, setShowPasswordForm] = useState(false);
@@ -32,6 +33,7 @@ export default function SettingsForm({ userData }: { userData: UserTypes }) {
         </Button>
         {showPasswordForm && <PasswordForm userData={userData} />}
       </Box>
+      <DeleteButton />
     </Box>
   );
 }

@@ -39,8 +39,7 @@ export default function PasswordForm({ userData }: { userData: UserTypes }) {
       setIsLoading(false);
     }
   };
-  // TODO: Ta bort förpopulerat lösenord och dekryptera hashat lösenord.
-  // TODO: Lägg till states, errors och isloading.
+
   return (
     <Paper sx={{ p: 2 }}>
       {isLoading ? (

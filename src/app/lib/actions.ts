@@ -210,8 +210,6 @@ export async function updateProfileAction(
       }),
     });
 
-    console.log("response from action", response);
-
     return { success: true, data: await response.json() };
   } catch (error) {
     console.error("Error updating profile:", error);
@@ -224,4 +222,26 @@ export async function updateProfileAction(
 
 export async function signOutAction() {
   await signOut({ redirectTo: "/signin" });
+}
+
+export async function deleteAccountAction() {
+  const session = await auth();
+
+  if (!session) {
+    return { error: "You must be logged in to delete your account" };
+  }
+
+  const userId = session.user.id;
+
+  try {
+    const baseUrl = process.env.NEXTAUTH_URL || "http://localhost:3000";
+    await fetch(`${baseUrl}/api/users/${userId}`, {
+      method: "DELETE",
+    });
+  } catch (error) {
+    console.error("Error deleting account:", error);
+    return { error: true, message: "Failed to delete account" };
+  } finally {
+    await signOutAction();
+  }
 }
