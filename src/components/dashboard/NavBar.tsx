@@ -46,23 +46,6 @@ function ResponsiveAppBar({ username }: { username: string | null }) {
         <Toolbar disableGutters sx={{ justifyContent: "space-between" }}>
           <Box sx={{ display: "flex", alignItems: "center", gap: 2 }}>
             <Image src="/Logo.png" alt="logo" width={160} height={100} />
-            {/* <Typography
-              variant="h6"
-              noWrap
-              component="a"
-              href="#app-bar-with-responsive-menu"
-              sx={{
-                mr: 2,
-                display: { xs: "none", md: "flex" },
-                fontFamily: "monospace",
-                fontWeight: 700,
-                letterSpacing: ".3rem",
-                color: "inherit",
-                textDecoration: "none",
-              }}
-            >
-              ACCAB
-            </Typography> */}
             {username && (
               <Typography
                 variant="body1"
