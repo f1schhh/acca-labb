@@ -138,8 +138,6 @@ export async function changePasswordAction(formData: FormData) {
       error:
         error instanceof Error ? error.message : "Failed to create account",
     };
-  } finally {
-    await signOutAction();
   }
 }
 

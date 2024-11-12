@@ -40,15 +40,15 @@ INSERT INTO auth.users (
   'Test',
   'User',
   'testuser@example.com',
-  'mypassword',   -- Replace with an actual hashed password if needed
+  'mypassword',
   '123 Example St',
   '1234567890',
   '12345',
   'Test City',
   'Test Country',
-  NULL,                -- Email not verified, so set to NULL
-  CURRENT_TIMESTAMP,   -- Automatically sets to the current time
-  NULL                 -- No last login date, so set to NULL
+  NULL,
+  CURRENT_TIMESTAMP,
+  NULL
 );
 
 
@@ -175,27 +175,27 @@ LIMIT 5 OFFSET 0;
 
 
 -- För att testa all data, denna kan tas bort när man har testat allt
-SELECT
-    u.id AS user_id,
-    u.first_name || ' ' || u.last_name AS user_name,
-    sj.job_title AS saved_job_title,
-    ja.job_location,
-    ja.company_name,
-    ja.contact_person,
-    ja.application_url,
-    jt.job_type AS job_type,
-    js.job_status AS application_status,
-    ja.created_date AS application_created,
-    ja.last_updated_date AS application_last_updated
-FROM
-    auth.users u
-LEFT JOIN
-    savedJobs sj ON u.id = sj.user_id
-LEFT JOIN
-    jobApplications ja ON sj.id = ja.job_title
-LEFT JOIN
-    jobTypes jt ON ja.job_type_id = jt.id
-LEFT JOIN
-    jobStatus js ON ja.job_status_id = js.id
-ORDER BY
-    u.id, sj.job_title;
+-- SELECT
+--     u.id AS user_id,
+--     u.first_name || ' ' || u.last_name AS user_name,
+--     sj.job_title AS saved_job_title,
+--     ja.job_location,
+--     ja.company_name,
+--     ja.contact_person,
+--     ja.application_url,
+--     jt.job_type AS job_type,
+--     js.job_status AS application_status,
+--     ja.created_date AS application_created,
+--     ja.last_updated_date AS application_last_updated
+-- FROM
+--     auth.users u
+-- LEFT JOIN
+--     savedJobs sj ON u.id = sj.user_id
+-- LEFT JOIN
+--     jobApplications ja ON sj.id = ja.job_title
+-- LEFT JOIN
+--     jobTypes jt ON ja.job_type_id = jt.id
+-- LEFT JOIN
+--     jobStatus js ON ja.job_status_id = js.id
+-- ORDER BY
+--     u.id, sj.job_title;
