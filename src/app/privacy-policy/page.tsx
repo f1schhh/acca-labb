@@ -212,7 +212,7 @@ export default function PrivacyPolicy() {
             variant="h5"
             gutterBottom
           >
-            Children's Privacy
+            Children&apos;s Privacy
           </Typography>
           <Typography>
             Our services are not intended for children under 13 years old, and
