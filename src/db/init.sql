@@ -65,7 +65,7 @@ CREATE TABLE jobStatus (
 
 CREATE TABLE savedJobs (
     id SERIAL PRIMARY KEY,
-    job_title VARCHAR(150) UNIQUE NOT NULL,
+    job_title VARCHAR(150) NOT NULL,
     user_id INT REFERENCES auth.users(id) ON DELETE CASCADE
 );
 
