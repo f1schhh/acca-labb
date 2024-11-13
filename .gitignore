@@ -45,5 +45,7 @@ Dockerfile
 docker/nginx/nginx.conf
 .dockerignore
 docker/nginx/conf.d/default.conf
-docker/1-nginx.config
-docker/2-nginx.config
+docker/nginx/conf.d/
+docker/nginx/
+docker/old/1-nginx.config
+docker/old/2-nginx.config
