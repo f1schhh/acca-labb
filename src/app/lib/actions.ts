@@ -60,7 +60,7 @@ export async function signUpAction(formData: FormData) {
     };
 
     console.log("dbData", dbData);
-    const baseUrl = process.env.NEXTAUTH_URL || "http://localhost:3000";
+    const baseUrl = process.env.AUTH_URL || "http://localhost:3000";
     const response = await fetch(`${baseUrl}/api/users`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
@@ -121,7 +121,7 @@ export async function changePasswordAction(formData: FormData) {
       status: "password",
     };
 
-    const baseUrl = process.env.NEXTAUTH_URL || "http://localhost:3000";
+    const baseUrl = process.env.AUTH_URL || "http://localhost:3000";
     const response = await fetch(`${baseUrl}/api/users`, {
       method: "PUT",
       headers: { "Content-Type": "application/json" },
@@ -198,7 +198,7 @@ export async function updateProfileAction(
       return { error: "No fields have been changed." };
     }
 
-    const baseUrl = process.env.NEXTAUTH_URL || "http://localhost:3000";
+    const baseUrl = process.env.AUTH_URL || "http://localhost:3000";
     const response = await fetch(`${baseUrl}/api/users/`, {
       method: "PATCH",
       headers: { "Content-Type": "application/json" },
@@ -232,7 +232,7 @@ export async function deleteAccountAction() {
   const userId = session.user.id;
 
   try {
-    const baseUrl = process.env.NEXTAUTH_URL || "http://localhost:3000";
+    const baseUrl = process.env.AUTH_URL || "http://localhost:3000";
     await fetch(`${baseUrl}/api/users/${userId}`, {
       method: "DELETE",
     });

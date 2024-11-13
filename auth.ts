@@ -7,7 +7,7 @@ import { getUserByEmail } from "./src/app/lib/helpers";
 export const { handlers, signIn, signOut, auth } = NextAuth({
   debug: process.env.NODE_ENV === "development",
   session: { strategy: "jwt" },
-  secret: process.env.NEXTAUTH_SECRET,
+  secret: process.env.AUTH_SECRET,
   providers: [
     Credentials({
       credentials: {
