@@ -59,6 +59,19 @@ export default function ProfileForm({ userData }: { userData: UserTypes }) {
     }
   };
 
+  const handleReset = () => {
+    setUpdatedValues({
+      first_name: "",
+      last_name: "",
+      email: userData.email, // Keep email as it's required for login
+      address: "",
+      phone: "",
+      zipcode: "",
+      city: "",
+      country: "",
+    });
+  };
+
   return (
     <Paper sx={{ p: 2 }}>
       <Typography sx={{ mb: 3 }} variant="h6">
@@ -180,6 +193,7 @@ export default function ProfileForm({ userData }: { userData: UserTypes }) {
                 }}
                 variant="contained"
                 type="reset"
+                onClick={handleReset}
               >
                 Reset
               </Button>

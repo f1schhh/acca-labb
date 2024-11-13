@@ -1,8 +1,9 @@
-import { Button, Container } from "@mui/material";
+import { Container } from "@mui/material";
 import SettingsForm from "../../../../components/forms/SettingsForm";
 import { auth } from "../../../../../auth";
 import { redirect } from "next/navigation";
 import { getUserById } from "../../../lib/helpers";
+import DeleteButton from "@/components/settings/DeleteButton";
 
 export default async function Settings() {
   const session = await auth();
@@ -24,7 +25,7 @@ export default async function Settings() {
       }}
     >
       {userData && <SettingsForm userData={userData} />}
-      <Button type="button">Delete account</Button>
+      <DeleteButton />
     </Container>
   );
 }

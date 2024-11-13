@@ -2,8 +2,9 @@
 
 import { auth, signIn, signOut } from "../../../auth";
 import { UserTypes } from "../../../types";
+import { getUserById } from "./helpers";
 import { signUpSchema, changePasswordSchema, updateProfileSchema } from "./zod";
-
+import { compare } from "bcryptjs";
 export async function loginWithCredentials(formData: FormData) {
   try {
     const response = await signIn("credentials", {
@@ -98,12 +99,11 @@ export async function changePasswordAction(formData: FormData) {
   if (!session) {
     return { error: "You must be logged in to change your password" };
   }
-
   try {
     const validatedFields = changePasswordSchema.safeParse({
       currentPassword: formData.get("password"),
-      newPassword: formData.get("password"),
-      confirmNewPassword: formData.get("confirmPassword"),
+      newPassword: formData.get("newPassword"),
+      confirmNewPassword: formData.get("confirmNewPassword"),
     });
 
     if (!validatedFields.success) {
@@ -113,6 +113,17 @@ export async function changePasswordAction(formData: FormData) {
     }
 
     const userId = session?.user?.id;
+
+    const userData = await getUserById(userId as string);
+    const passwordMatch = await compare(
+      validatedFields.data.currentPassword,
+      userData.password
+    );
+
+    if (!passwordMatch) {
+      return { error: "Current password is incorrect" };
+    }
+
     const { confirmNewPassword } = validatedFields.data;
 
     const dbData = {
@@ -229,12 +240,12 @@ export async function deleteAccountAction() {
     return { error: "You must be logged in to delete your account" };
   }
 
-  const userId = session.user.id;
-
   try {
     const baseUrl = process.env.AUTH_URL || "http://localhost:3000";
-    await fetch(`${baseUrl}/api/users/${userId}`, {
+    await fetch(`${baseUrl}/api/users`, {
       method: "DELETE",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ userId: session.user.id }),
     });
   } catch (error) {
     console.error("Error deleting account:", error);

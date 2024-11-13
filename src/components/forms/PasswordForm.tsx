@@ -1,12 +1,19 @@
-import { Box, Button, Paper, TextField, CircularProgress } from "@mui/material";
-import { UserTypes } from "../../../types";
+import {
+  Box,
+  Button,
+  Paper,
+  TextField,
+  CircularProgress,
+  Alert,
+} from "@mui/material";
 import { useState } from "react";
 import { changePasswordSchema } from "@/app/lib/zod";
 import { changePasswordAction } from "@/app/lib/actions";
 
-export default function PasswordForm({ userData }: { userData: UserTypes }) {
+export default function PasswordForm() {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState("");
+
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     setIsLoading(true);
@@ -53,7 +60,6 @@ export default function PasswordForm({ userData }: { userData: UserTypes }) {
               type="password"
               name="password"
               required
-              defaultValue={userData.password}
             />
             <TextField
               id="newPassword-input"
@@ -69,6 +75,7 @@ export default function PasswordForm({ userData }: { userData: UserTypes }) {
               name="confirmNewPassword"
               required
             />
+            {error && <Alert severity="error">{error}</Alert>}
           </Box>
           <Button
             sx={{
