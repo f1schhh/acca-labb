@@ -1,5 +1,4 @@
 import { NextResponse, NextRequest } from "next/server";
-import { pool } from "../../lib/db";
 import bcrypt from "bcryptjs";
 import { auth } from "../../../../auth";
 import { query } from "../../lib/db";
@@ -50,7 +49,7 @@ export async function POST(request: NextRequest) {
         userData.email,
         hashedPassword,
         userData.address,
-        userData.phoneNumber,
+        userData.phone,
         userData.zipcode,
         userData.city,
         userData.country,
@@ -72,17 +71,16 @@ export async function POST(request: NextRequest) {
 export async function PUT(request: NextRequest) {
   try {
     const userData = await request.json();
-    const client = await pool.connect();
-    let query, params;
+    let querys: string, params: (string | number | boolean | undefined)[];
 
     if (userData.status === "password") {
-      console.log("inne i query");
-      query = `UPDATE auth.users SET
+      const hashedPassword = await bcrypt.hash(userData.password, 10);
+      querys = `UPDATE auth.users SET
       password = $1 WHERE id = $2`;
 
-      params = [userData.password, userData.id];
+      params = [hashedPassword, userData.id];
     } else {
-      query = `UPDATE auth.users SET
+      querys = `UPDATE auth.users SET
       first_name = $1,
       last_name = $2,
       email = $3,
@@ -104,18 +102,7 @@ export async function PUT(request: NextRequest) {
       ];
     }
 
-    if (userData.password) {
-      const hashedPassword = await bcrypt.hash(userData.password, 10);
-      query += `, password = $${params.length + 1}`;
-      params.push(hashedPassword);
-    }
-
-    query += ` WHERE id = $${params.length + 1}
-      RETURNING id, first_name, last_name, email, address, phone, zipcode, city, country`;
-    params.push(userData.id);
-
-    const result = await client.query(query, params);
-    client.release();
+    const result = await query(querys, params);
 
     if (result.rowCount === 0) {
       return NextResponse.json({ error: "User not found" }, { status: 404 });
@@ -204,6 +191,41 @@ export async function PATCH(request: NextRequest) {
     return NextResponse.json(result.rows[0]);
   } catch (error) {
     console.error("Error updating user:", error);
+    return NextResponse.json(
+      { error: "Internal server error" },
+      { status: 500 }
+    );
+  }
+}
+
+export async function DELETE(request: NextRequest) {
+  const { userId } = await request.json();
+
+  if (!userId) {
+    return NextResponse.json(
+      { error: "User ID not provided" },
+      { status: 400 }
+    );
+  }
+
+  try {
+    await query("BEGIN");
+
+    const userExist = await getUserById(userId);
+    if (!userExist) {
+      return NextResponse.json({ error: "User not found" }, { status: 404 });
+    }
+    await query("DELETE FROM auth.users WHERE id = $1 RETURNING id", [userId]);
+
+    await query("COMMIT");
+
+    return NextResponse.json(
+      { message: "User deleted successfully" },
+      { status: 200 }
+    );
+  } catch (error) {
+    await query("ROLLBACK");
+    console.error("Error deleting user:", error);
     return NextResponse.json(
       { error: "Internal server error" },
       { status: 500 }
