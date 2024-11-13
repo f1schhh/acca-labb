@@ -11,9 +11,7 @@ export default function Dashboard() {
 
   const numOfApplications = applications ? applications.length : 0;
 
-  const latestApplication = applications
-    ? applications[numOfApplications - 1]
-    : null;
+  const latestApplication = applications ? [...applications].shift() : null;
   const company_name = latestApplication?.company_name;
   const job_title = latestApplication?.job_title;
 
@@ -38,10 +36,7 @@ export default function Dashboard() {
           marginTop: 2,
         }}
       >
-        <SummaryCard
-          title="Total applications"
-          stat={numOfApplications}
-        />
+        <SummaryCard title="Total applications" stat={numOfApplications} />
         <SummaryCard
           title="Latest applications"
           jobbTitle={job_title?.toString()}
