@@ -6,9 +6,7 @@ import { useApplications } from "./ApplicationsContext";
 import LoadingTable from "@/components/dashboard/LoadingTable";
 
 export default function Dashboard() {
-  const { applications, loading } = useApplications();
-
-  const numOfApplications = applications ? applications.length : 0;
+  const { applications, loading, totalCount } = useApplications();
 
   const latestApplication = applications ? [...applications].shift() : null;
   const company_name = latestApplication?.company_name;
@@ -36,7 +34,7 @@ export default function Dashboard() {
       >
         <SummaryCard
           title="Total applications"
-          stat={numOfApplications}
+          stat={totalCount}
         />
         <SummaryCard
           title="Latest applications"
