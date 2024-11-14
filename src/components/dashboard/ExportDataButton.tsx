@@ -51,7 +51,6 @@ const ExportDataButton = ({ email }: { email: string }) => {
     <>
       <Button
         onClick={downloadCSV}
-        sx={{ mb: 3 }}
         variant="contained"
         disabled={loading}
       >

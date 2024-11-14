@@ -1,9 +1,10 @@
-import { Container } from "@mui/material";
+import { Box, Container } from "@mui/material";
 import SettingsForm from "../../../../components/forms/SettingsForm";
 import { auth } from "../../../../../auth";
 import { redirect } from "next/navigation";
 import { getUserById } from "../../../lib/helpers";
 import DeleteButton from "@/components/settings/DeleteButton";
+import ExportDataButton from "@/components/dashboard/ExportDataButton";
 
 export default async function Settings() {
   const session = await auth();
@@ -25,7 +26,10 @@ export default async function Settings() {
       }}
     >
       {userData && <SettingsForm userData={userData} />}
-      <DeleteButton />
+      <Box sx={{ display: "flex", gap: 2 }}>
+        <DeleteButton />
+        <ExportDataButton email={userData.email} />
+      </Box>
     </Container>
   );
 }
