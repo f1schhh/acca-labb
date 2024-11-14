@@ -10,10 +10,13 @@ import { UserTypes } from "../../../types/userTypes";
 import { useState } from "react";
 import { updateProfileSchema } from "@/app/lib/zod";
 import { updateProfileAction } from "@/app/lib/actions";
+import { useAlert } from "@/app/(logged-in)/dashboard/AlertContext";
+import SlidingAlert from "../dashboard/SlideInAlert";
 
 export default function ProfileForm({ userData }: { userData: UserTypes }) {
   const [isLoading, setIsLoading] = useState(false);
-  const [error, setError] = useState("");
+  const { showAlert, alertMsg, error, setShowAlert, setAlertMsg, setError } =
+    useAlert();
   const [updatedValues, setUpdatedValues] =
     useState<Partial<UserTypes>>(userData);
 
@@ -36,24 +39,40 @@ export default function ProfileForm({ userData }: { userData: UserTypes }) {
         phoneNumber: formData.get("phoneNumber"),
       });
 
-      if (parsedData.success) {
-        Object.assign(currentUserData, parsedData.data);
-      } else {
-        setError(parsedData.error.errors[0].message);
+      if (!parsedData.success) {
+        setError(true);
+        setShowAlert(true);
+        setAlertMsg(`Please fill in all required fields`);
+        setTimeout(() => {
+          setShowAlert(false);
+          setAlertMsg("");
+          setError(false);
+        }, 7000);
         return;
       }
 
       const response = await updateProfileAction(formData, currentUserData);
 
-      if (response.error) {
-        setError(response.error);
-        console.log(error);
-      } else {
+      if (response.data) {
         setUpdatedValues(response.data);
+        setAlertMsg(`Your profile has been updated successfully!`);
+        setShowAlert(true);
+        setTimeout(() => {
+          setShowAlert(false);
+          setAlertMsg("");
+        }, 3100);
       }
     } catch (error) {
       console.error("Error:", error);
-      setError("Failed to update profile");
+      setError(true);
+      setShowAlert(true);
+      setAlertMsg(`Something went wrong`);
+
+      setTimeout(() => {
+        setShowAlert(false);
+        setAlertMsg("");
+        setError(false);
+      }, 7000);
     } finally {
       setIsLoading(false);
     }
@@ -77,6 +96,7 @@ export default function ProfileForm({ userData }: { userData: UserTypes }) {
       <Typography sx={{ mb: 3 }} variant="h6">
         Profile settings
       </Typography>
+      {showAlert && <SlidingAlert msg={alertMsg} error={error} />}
       {isLoading ? (
         <CircularProgress />
       ) : (

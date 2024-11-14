@@ -160,6 +160,7 @@ export async function updateProfileAction(
   if (!session) {
     return { error: "You must be logged in to change your profile" };
   }
+  console.log(formData);
 
   try {
     const validatedFields = updateProfileSchema.safeParse({
