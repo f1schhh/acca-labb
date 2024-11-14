@@ -32,7 +32,7 @@ services:
       - ./src/db/init.sql:/docker-entrypoint-initdb.d/init.sql
     healthcheck:
       interval: 1s
-      test: 'pg_isready --username=${DB_USER}'
+      test: 'pg_isready --username=${DB_USER} --dbname=${DB_NAME}'
 
 volumes:
   pgdata:
