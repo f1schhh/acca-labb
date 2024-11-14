@@ -1,37 +1,18 @@
 "use client";
-import { useEffect, useState } from "react";
 import { Box, Typography } from "@mui/material";
-import ApplicationCard from "../../../components/dashboard/ApplicationCard";
+import SummaryCard from "../../../components/dashboard/SummaryCard";
 import ApplicationTable from "../../../components/dashboard/ApplicationTable";
+import { useApplications } from "./ApplicationsContext";
+import LoadingTable from "@/components/dashboard/LoadingTable";
 
 export default function Dashboard() {
-  const [applications, setApplications] = useState([]);
-  const [error, setError] = useState<string | null>(null);
-  const [loading, setLoading] = useState<boolean>(true);
+  const { applications, loading } = useApplications();
 
-  const getUserApplications = async () => {
-    try {
-      const response = await fetch("/api/applications");
-      if (!response.ok) {
-        throw new Error("Failed to fetch applications");
-      }
-      const result = await response.json();
-      if (result.data.length === 0) {
-        return;
-      } else {
-        setApplications(result.data);
-      }
-    } catch (err) {
-      console.error(err);
-      setError("Error fetching applications");
-    } finally {
-      setLoading(false);
-    }
-  };
+  const numOfApplications = applications ? applications.length : 0;
 
-  useEffect(() => {
-    getUserApplications();
-  }, []);
+  const latestApplication = applications ? [...applications].shift() : null;
+  const company_name = latestApplication?.company_name;
+  const job_title = latestApplication?.job_title;
 
   return (
     <Box
@@ -53,22 +34,27 @@ export default function Dashboard() {
           marginTop: 2,
         }}
       >
-        <ApplicationCard />
-        <ApplicationCard />
+        <SummaryCard
+          title="Total applications"
+          stat={numOfApplications}
+        />
+        <SummaryCard
+          title="Latest applications"
+          jobbTitle={job_title?.toString()}
+          companyTitle={company_name}
+        />
       </Box>
+      {loading && (
+        <>
+          <Typography variant="h5">Latest applications</Typography>
+          <LoadingTable items={5} />
+        </>
+      )}
       {applications && applications.length > 0 && (
         <>
           <Typography variant="h5">Latest applications</Typography>
           <Box>
-            {error ? (
-              <Typography color="error">{error}</Typography>
-            ) : (
-              <ApplicationTable
-                applications={applications}
-                loading={loading}
-                onAction={() => getUserApplications()}
-              />
-            )}
+            <ApplicationTable applications={applications} />
           </Box>
         </>
       )}

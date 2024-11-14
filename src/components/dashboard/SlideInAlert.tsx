@@ -7,14 +7,13 @@ const SlidingAlert = ({ msg, error }: { msg: string; error: boolean }) => {
   const [visible, setVisible] = useState(false);
 
   useEffect(() => {
-    setVisible(true);
+    if (msg) {
+      setVisible(true);
+      const timer = setTimeout(() => setVisible(false), 3000);
+      return () => clearTimeout(timer);
+    }
+  }, [msg]);
 
-    const timer = setTimeout(() => {
-      setVisible(false);
-    }, 3000);
-
-    return () => clearTimeout(timer);
-  }, []);
   return (
     <Alert
       action={

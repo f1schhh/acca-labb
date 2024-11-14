@@ -1,36 +1,58 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Job Application Tracker
+
+A web application built with Next.js that helps users track and manage their job applications in one centralized place.
+
+## Features
+
+- **Application Dashboard**: View all your job applications with key statistics
+- **Application Management**: Add, edit, and archive job applications
+- **Status Tracking**: Track application statuses (pending, interviewed, rejected, etc.)
+- **Job Types**: Categorize applications by job types (full-time, part-time, contract)
+- **Secure Authentication**: User authentication and protected routes
+- **Responsive Design**: Works seamlessly on desktop and mobile devices
+
+## Tech Stack
+
+- **Frontend**: Next.js, Material-UI, TypeScript
+- **Backend**: Next.js API Routes
+- **Database**: PostgreSQL
+- **Authentication**: NextAuth.js
+- **Styling**: Material-UI (MUI)
 
 ## Getting Started
 
-First, run the development server:
+1. Clone the repository
+2. Install dependencies: `npm install`
+3. Set up environment variables (see `.env.example`)
+<!-- 4. Run the development server: `npm run dev`
+4. Open [http://localhost:3000](http://localhost:3000) -->
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+## Future Improvements
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+1. **Analytics & Insights**
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+   - Application success rate metrics
+   - Interview conversion rates
+   - Timeline visualizations
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+2. **Enhanced Features**
 
-## Learn More
+   - Email notifications for application updates
+   - Document management (resume versions, cover letters)
+   - Interview scheduling integration
+   - Company research notes
+   - Salary information tracking
 
-To learn more about Next.js, take a look at the following resources:
+3. **User Experience**
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+   - Drag-and-drop application status updates
+   - Bulk application import/export
+   - Custom status workflows
+   - Advanced filtering and search
+   - Application templates
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+4. **Integration Possibilities**
+   - LinkedIn job application sync
+   - Calendar integration for interviews
+   - Job board API integrations
+   - Email parsing for application confirmations

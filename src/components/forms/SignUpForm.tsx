@@ -6,18 +6,19 @@ import {
   Checkbox,
   Link,
   TextField,
+  Typography,
 } from "@mui/material";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { signUpAction } from "@/app/lib/actions";
 import { signUpSchema } from "@/app/lib/zod";
-// import { formProps, UserTypes } from "../../types";
 
 export default function SignUpForm() {
   const router = useRouter();
   const [error, setError] = useState<string | null>("");
   const [isLoading, setIsLoading] = useState<boolean>(false);
-
+  const [privacyPolicyAccepted, setPrivacyPolicyAccepted] =
+    useState<boolean>(false);
   const handleOnSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     setIsLoading(true);
@@ -38,8 +39,6 @@ export default function SignUpForm() {
         country: formData.get("country"),
         phoneNumber: formData.get("phoneNumber"),
       });
-
-      console.log("2. Validation result:", validatedFields);
 
       if (!validatedFields.success) {
         setError(validatedFields.error.errors[0].message);
@@ -178,10 +177,13 @@ export default function SignUpForm() {
         <FormControlLabel
           required
           control={<Checkbox />}
+          checked={privacyPolicyAccepted}
+          onChange={() => setPrivacyPolicyAccepted(!privacyPolicyAccepted)}
           label={
-            <span>
-              I agree to the <Link href="#">Your Link</Link>
-            </span>
+            <Typography variant="body2">
+              I agree to the processing of my personal data as described in the{" "}
+              <Link href="/privacy-policy">Privacy Policy</Link>
+            </Typography>
           }
         />
         {error && (
