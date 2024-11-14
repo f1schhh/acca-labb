@@ -2,24 +2,15 @@ import { Box, Container, Typography, Button, Paper } from "@mui/material";
 
 export default function PrivacyPolicy() {
   return (
-    <Container
-      maxWidth="md"
-      sx={{ py: 4 }}
-    >
+    <Container maxWidth="md" sx={{ py: 4 }}>
       <Paper sx={{ p: 4 }}>
         <Box sx={{ py: 4 }}>
-          <Typography
-            variant="h4"
-            gutterBottom
-          >
+          <Typography variant="h4" gutterBottom>
             Privacy Policy
           </Typography>
           <Typography>Last updated: 11/12/2024</Typography>
 
-          <Typography
-            variant="h5"
-            gutterBottom
-          >
+          <Typography variant="h5" gutterBottom>
             Data We Collect
           </Typography>
           <div>
@@ -50,10 +41,7 @@ export default function PrivacyPolicy() {
             </ul>
           </div>
 
-          <Typography
-            variant="h5"
-            gutterBottom
-          >
+          <Typography variant="h5" gutterBottom>
             How We Use Your Data
           </Typography>
           <div>
@@ -82,7 +70,7 @@ export default function PrivacyPolicy() {
               </li>
               <li>
                 <strong>Security</strong>: To ensure the security of our
-                services and prevent fraud.
+                services.
               </li>
               <li>
                 <strong>Legal Compliance</strong>: To comply with legal
@@ -91,10 +79,7 @@ export default function PrivacyPolicy() {
             </ul>
           </div>
 
-          <Typography
-            variant="h5"
-            gutterBottom
-          >
+          <Typography variant="h5" gutterBottom>
             How We Share Your Information
           </Typography>
           <div>
@@ -122,23 +107,18 @@ export default function PrivacyPolicy() {
             </ul>
           </div>
 
-          <Typography
-            variant="h5"
-            gutterBottom
-          >
+          <Typography variant="h5" gutterBottom>
             Data Retention
           </Typography>
           <Typography>
             We retain your data as long as necessary to fulfill the purposes
             outlined in this policy, including legal or regulatory compliance.
             We will delete your data upon account deletion, subject to retention
-            policies.
+            policies. Data for users will be automatically deleted after 1 year,
+            for employees after 5 years.
           </Typography>
 
-          <Typography
-            variant="h5"
-            gutterBottom
-          >
+          <Typography variant="h5" gutterBottom>
             Your Data Protection Rights
           </Typography>
           <div>
@@ -169,13 +149,10 @@ export default function PrivacyPolicy() {
                 certain processing activities, including marketing.
               </li>
             </ul>
-            To exercise your rights, please contact us at [Contact Email].
+            To exercise your rights, please contact us at info@acca.com.
           </div>
 
-          <Typography
-            variant="h5"
-            gutterBottom
-          >
+          <Typography variant="h5" gutterBottom>
             Data Security
           </Typography>
           <Typography>
@@ -184,10 +161,7 @@ export default function PrivacyPolicy() {
             please be aware that no transmission method is 100% secure.
           </Typography>
 
-          <Typography
-            variant="h5"
-            gutterBottom
-          >
+          <Typography variant="h5" gutterBottom>
             Cookies and Tracking Technologies
           </Typography>
           <Typography>
@@ -196,10 +170,7 @@ export default function PrivacyPolicy() {
             browser, but disabling cookies may affect service functionality.
           </Typography>
 
-          <Typography
-            variant="h5"
-            gutterBottom
-          >
+          <Typography variant="h5" gutterBottom>
             International Data Transfers
           </Typography>
           <Typography>
@@ -208,10 +179,7 @@ export default function PrivacyPolicy() {
             compliance with applicable laws.
           </Typography>
 
-          <Typography
-            variant="h5"
-            gutterBottom
-          >
+          <Typography variant="h5" gutterBottom>
             Children&apos;s Privacy
           </Typography>
           <Typography>
@@ -219,10 +187,7 @@ export default function PrivacyPolicy() {
             we do not knowingly collect personal information from children.
           </Typography>
 
-          <Typography
-            variant="h5"
-            gutterBottom
-          >
+          <Typography variant="h5" gutterBottom>
             Changes to This Privacy Policy
           </Typography>
           <Typography>
@@ -231,26 +196,20 @@ export default function PrivacyPolicy() {
             encourage you to review the policy periodically.
           </Typography>
 
-          <Typography
-            variant="h5"
-            gutterBottom
-          >
+          <Typography variant="h5" gutterBottom>
             Contact Us
           </Typography>
           <div>
             If you have questions or concerns about this Privacy Policy, please
             contact us at:
             <ul>
-              <li>Email: [Contact Email]</li>
-              <li>Phone: [Contact Phone Number]</li>
-              <li>Address: [Company Address]</li>
+              <li>Email: info@acca.com</li>
+              <li>Phone: 0701234567</li>
+              <li>Address: Drottninggatan 1</li>
             </ul>
           </div>
 
-          <Button
-            variant="contained"
-            href="/signup"
-          >
+          <Button variant="contained" href="/signup">
             Back to signup
           </Button>
         </Box>
