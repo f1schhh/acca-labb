@@ -24,8 +24,6 @@ A web application built with Next.js that helps users track and manage their job
 1. Clone the repository
 2. Install dependencies: `npm install`
 3. Set up environment variables (see `.env.example`)
-<!-- 4. Run the development server: `npm run dev`
-4. Open [http://localhost:3000](http://localhost:3000) -->
 
 ## Future Improvements
 
