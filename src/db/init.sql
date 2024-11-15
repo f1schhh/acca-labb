@@ -18,7 +18,7 @@ CREATE TABLE IF NOT EXISTS auth.users (
 
 CREATE TABLE IF NOT EXISTS auth.sessions (
   id SERIAL PRIMARY KEY,
-  user_id INTEGER NOT NULL REFERENCES auth.users(id),
+  user_id INTEGER NOT NULL REFERENCES auth.users(id) ON DELETE CASCADE,
   expires TIMESTAMP WITH TIME ZONE NOT NULL,
   session_token VARCHAR(255) NOT NULL UNIQUE
 );
@@ -155,23 +155,28 @@ CREATE INDEX idx_saved_jobs_job_title_user_id ON savedJobs(job_title, user_id);
 CREATE INDEX idx_job_types_id ON jobTypes(id);
 CREATE INDEX idx_job_status_id ON jobStatus(id);
 
+
+CREATE INDEX idx_sessions_user_id ON auth.sessions(user_id);
+CREATE INDEX idx_sessions_token ON auth.sessions(session_token);
+CREATE INDEX idx_sessions_expires ON auth.sessions(expires);
+
 -- Analyze all indexes
 
--- Example for testing applications indexes
-EXPLAIN ANALYZE
-SELECT ja.*,
-       sj.job_title,
-       jt.job_type,
-       jt.id AS job_type_id,
-       js.job_status,
-       js.id AS job_status_id
-FROM jobApplications ja
-JOIN savedJobs sj ON ja.job_title = sj.id
-LEFT JOIN jobTypes jt ON ja.job_type_id = jt.id
-LEFT JOIN jobStatus js ON ja.job_status_id = js.id
-WHERE ja.user_id = 1
-ORDER BY ja.created_date DESC
-LIMIT 5 OFFSET 0;
+-- -- Example for testing applications indexes
+-- EXPLAIN ANALYZE
+-- SELECT ja.*,
+--        sj.job_title,
+--        jt.job_type,
+--        jt.id AS job_type_id,
+--        js.job_status,
+--        js.id AS job_status_id
+-- FROM jobApplications ja
+-- JOIN savedJobs sj ON ja.job_title = sj.id
+-- LEFT JOIN jobTypes jt ON ja.job_type_id = jt.id
+-- LEFT JOIN jobStatus js ON ja.job_status_id = js.id
+-- WHERE ja.user_id = 1
+-- ORDER BY ja.created_date DESC
+-- LIMIT 5 OFFSET 0;
 
 
 -- För att testa all data, denna kan tas bort när man har testat allt
