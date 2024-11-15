@@ -39,7 +39,7 @@ export default function ProfileForm({ userData }: { userData: UserTypes }) {
         phoneNumber: formData.get("phoneNumber"),
       });
 
-      if (!parsedData.success) {
+      if (parsedData && !parsedData.success) {
         setError(true);
         setShowAlert(true);
         setAlertMsg(`Please fill in all required fields`);
