@@ -6,14 +6,7 @@ import { getUserById } from "./helpers";
 import { signUpSchema, changePasswordSchema, updateProfileSchema } from "./zod";
 import { compare } from "bcryptjs";
 
-function getBaseUrl() {
-  if (process.env.NODE_ENV === "production") {
-    return process.env.BACKEND_URL || "http://localhost:80";
-  }
-  return process.env.AUTH_URL || "http://localhost:3000";
-}
-
-const backendUrl = getBaseUrl();
+const apiUrl = process.env.AUTH_URL;
 
 export async function loginWithCredentials(formData: FormData) {
   try {
@@ -71,7 +64,7 @@ export async function signUpAction(formData: FormData) {
     };
 
     console.log("dbData", dbData);
-    const response = await fetch(`${backendUrl}/api/users`, {
+    const response = await fetch(`${apiUrl}/api/users`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(dbData),
@@ -141,7 +134,7 @@ export async function changePasswordAction(formData: FormData) {
       status: "password",
     };
 
-    const response = await fetch(`${backendUrl}/api/users`, {
+    const response = await fetch(`${apiUrl}/api/users`, {
       method: "PUT",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(dbData),
@@ -218,8 +211,7 @@ export async function updateProfileAction(
       return { error: "No fields have been changed." };
     }
 
-    // const baseUrl = process.env.AUTH_URL || "http://localhost:3000";
-    const response = await fetch(`${backendUrl}/api/users/`, {
+    const response = await fetch(`${apiUrl}/api/users/`, {
       method: "PATCH",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
@@ -250,7 +242,7 @@ export async function deleteAccountAction() {
   }
 
   try {
-    await fetch(`${backendUrl}/api/users`, {
+    await fetch(`${apiUrl}/api/users`, {
       method: "DELETE",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ userId: session.user.id }),
