@@ -124,8 +124,7 @@ export default function SignUpForm() {
             flexDirection: "row",
             justifyContent: "space-between",
             gap: 3,
-          }}
-        >
+          }}>
           <TextField
             id="zipcode-input"
             label="Zip code"
@@ -152,8 +151,7 @@ export default function SignUpForm() {
             flexDirection: "row",
             justifyContent: "space-between",
             gap: 3,
-          }}
-        >
+          }}>
           <TextField
             id="country-input"
             label="Country"
@@ -182,7 +180,8 @@ export default function SignUpForm() {
           label={
             <Typography variant="body2">
               I agree to the processing of my personal data as described in the{" "}
-              <Link href="/privacy-policy">Privacy Policy</Link>
+              <Link href="/privacy-policy">Privacy Policy</Link> and{" "}
+              <Link href="/personal-data-record">Personal data record</Link>
             </Typography>
           }
         />
@@ -202,8 +201,7 @@ export default function SignUpForm() {
             borderRadius: 1.5,
             textTransform: "none",
             fontSize: "1rem",
-          }}
-        >
+          }}>
           {isLoading ? "Signing up..." : "Sign up"}
         </Button>
       </Box>
