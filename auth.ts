@@ -2,7 +2,7 @@
 import NextAuth from "next-auth";
 import Credentials from "next-auth/providers/credentials";
 import bcrypt from "bcryptjs";
-import { getUserByEmail } from "./src/app/lib/helpers";
+import { getUserByEmail, updateLastLogin } from "./src/app/lib/helpers";
 
 export const { handlers, signIn, signOut, auth } = NextAuth({
   debug: process.env.NODE_ENV === "development",
@@ -29,6 +29,11 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
         if (!passwordMatch) {
           console.log("Password doesn't match");
           throw new Error("Password doesn't match");
+        }
+        const updateLoginDate = await updateLastLogin(user.id);
+
+        if (!updateLoginDate) {
+          throw new Error("Error updating last login");
         }
 
         return {

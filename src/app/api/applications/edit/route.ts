@@ -44,7 +44,8 @@ export async function PUT(request: NextRequest) {
          contact_person = $4,
          application_url = $5,
          job_type_id = $6,
-         job_status_id = $7
+         job_status_id = $7,
+         last_updated_date = NOW()
        WHERE user_id = $8 AND id = $9
        RETURNING *`,
       [

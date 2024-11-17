@@ -46,3 +46,21 @@ export async function getUserById(id: string) {
     return null;
   }
 }
+
+export async function updateLastLogin(userid: number) {
+  try {
+    const result = await query(
+      "UPDATE auth.users SET last_login_date = NOW() WHERE id = $1",
+      [userid]
+    );
+
+    if (result.rowCount && result.rowCount > 0) {
+      return true;
+    } else {
+      return false;
+    }
+  } catch (error) {
+    console.error("Error updating last login:", error);
+    return null;
+  }
+}
